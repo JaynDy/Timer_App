@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  height: 100vh;
+  -webkit-app-region: drag;
+  position: relative;
+}
+.container img {
+  width: 100%;
+  height: auto;
+}
+
+.beeContainer {
+  position: absolute;
+  bottom: 75%;
+  left: 65%;
+}
+.beeImg {
+}

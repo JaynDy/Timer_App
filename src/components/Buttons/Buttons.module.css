@@ -1,0 +1,13 @@
+.btnContainer {
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  top: 70%;
+  left: 24%;
+  width: 12%;
+}
+.btn {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}

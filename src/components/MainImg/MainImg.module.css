@@ -1,0 +1,21 @@
+.mainImgContainer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.screenImg {
+  position: absolute;
+  margin-top: 10%;
+  max-width: 80%;
+}
+h3 {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: green;
+  font-size: medium;
+}
