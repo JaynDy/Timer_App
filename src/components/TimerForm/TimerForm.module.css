@@ -18,7 +18,19 @@ form {
 }
 label {
   font-family: Georgia, "Times New Roman", Times, serif;
-  color: rgb(124, 26, 185);
+  /* color: rgb(124, 26, 185); */
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: large;
   font-weight: bolder;
 }

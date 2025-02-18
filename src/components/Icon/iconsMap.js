@@ -11,6 +11,8 @@ import orangeBtn from "../../img/orangeBtn.png?react";
 import yellowBtn from "../../img/yellowBtn.png?react";
 import cross from "../../img/cross.svg?react";
 import bee from "../../img/bee.png?react";
+import trayBee from "../../img/traybee.png?react";
+
 export const iconsMap = {
   strawberry,
   screen,
@@ -25,4 +27,5 @@ export const iconsMap = {
   yellowBtn,
   cross,
   bee,
+  trayBee,
 };

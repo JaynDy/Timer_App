@@ -10,8 +10,9 @@ app.on("ready", () => {
     frame: false,
     alwaysOnTop: true,
     resizable: false,
-    skipTaskbar: true,
+    // skipTaskbar: true,
     transparent: true,
+    icon: app.isPackaged ? path.join(process.resourcesPath, "img/bee.png") : path.join(__dirname, "../src/img/bee.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -28,6 +29,6 @@ app.on("ready", () => {
     height: windowHeight
   });
   mainWindow.loadURL(
-    app.isPackaged ? `file://${path.join(__dirname, "../dist/index.html")}` : "http://localhost:5173"
+    app.isPackaged ? `file://${path.join(__dirname, "index.html")}` : "http://localhost:5173"
   );
 });
