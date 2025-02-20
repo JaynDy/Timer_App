@@ -1,0 +1,29 @@
+.alarmContainer {
+  position: absolute;
+  bottom: 75%;
+  left: 65%;
+}
+.alarmAnimation {
+  animation: shake 0.5s ease-in-out infinite;
+  cursor: pointer;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-15px);
+  }
+  50% {
+    transform: translateX(15px);
+  }
+  75% {
+    transform: translateX(-15px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.beeImg {
+  -webkit-app-region: no-drag;
+}

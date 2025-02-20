@@ -12,8 +12,12 @@
     "start": "electron ."
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.1",
+    "electron-store": "^8.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-query": "^3.39.3",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -33,5 +37,23 @@
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-static-copy": "^2.2.0",
     "wait-on": "^8.0.2"
+  },
+  "build": {
+    "files": [
+      "src/**/*",
+      "electron/**/*",
+      "preload.js",
+      "store.js",
+      "dist/**/*"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "extraFiles": [
+      {
+        "from": "electron/preload.js",
+        "to": "dist-electron/preload.js"
+      }
+    ]
   }
 }

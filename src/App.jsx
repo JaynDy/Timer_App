@@ -1,32 +1,72 @@
 import React from "react";
 import "./App.css";
-import { Icon } from "./components/Icon/Icon";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { convertToSeconds, formatTime } from "./utilities";
 import { TimerForm } from "./components/TimerForm/TimerForm";
 import { MainImg } from "./components/MainImg/MainImg";
+import { Bee } from "./components/Bee";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentTimer } from "./reducer/timerSlice";
+// import { saveTimers, getTimers } from "../electron/store";
 
 export default function App() {
-  const [time, setTime] = useState("00 : 30 : 00");
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isStartingForm, setIsStartingForm] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(true);
   const [isPressedTimerBtn, setIsPressedTimerBtn] = useState(false);
+  const [isTimerUp, setIsTimerUp] = useState(false);
+  const [isClickBtnAdd, setIsClickBtnAdd] = useState(true);
   const timeRef = useRef(null);
+  // const [timers, setTimers] = useState(getTimers());
+
+  const dispatch = useDispatch();
+  const currentTimer = useSelector((state) => state.timer.currentTimer);
+  console.log("currentTimer", currentTimer);
+
+  // useEffect(() => {
+  //   if (window.electronAPI) {
+  //     window.electronAPI.getTimers().then((timers) => {
+  //       console.log("Таймеры получены:", timers);
+  //     });
+  //   } else {
+  //     // console.error("❌ window.electronAPI не найден!");
+  //   }
+  // }, []);
+
+  // console.log("timers", ...timers);
+
+  // const handleAddNewTimer = (newTimer) => {
+  //   const updatedTimers = [...timers, newTimer];
+  //   setTimers(updatedTimers);
+  //   saveTimers(updatedTimers);
+  // };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newTimer = {
+      initialTime: currentTimer.initialTime,
+      remainingTime: currentTimer.remainingTime,
+    };
+    handleAddNewTimer(newTimer);
+    console.log("✅ Submit с time:", currentTimer.initialTime);
+  };
 
   const startCountDown = () => {
     if (timeRef.current) return;
 
-    let seconds = Math.floor(convertToSeconds(time));
+    let seconds = Math.floor(convertToSeconds(currentTimer.remainingTime));
 
     timeRef.current = setInterval(() => {
       if (seconds <= 0) {
         clearInterval(timeRef.current);
         timeRef.current = null;
-        setTime("00 : 00 : 00");
+        dispatch(setCurrentTimer({ remainingTime: "00 : 00 : 00" }));
         setIsPressedTimerBtn(false);
         return;
       }
       seconds -= 1;
-      setTime(formatTime(seconds));
+      dispatch(
+        setCurrentTimer({ ...currentTimer, remainingTime: formatTime(seconds) })
+      );
     }, 1000);
   };
 
@@ -37,7 +77,7 @@ export default function App() {
 
   const handleClickBtn = (iconName) => {
     console.log("click:", iconName);
-    if (iconName === "start" && time !== "00 : 00 : 00") {
+    if (iconName === "start") {
       startCountDown();
       setIsPressedTimerBtn(true);
     }
@@ -47,11 +87,15 @@ export default function App() {
     }
     if (iconName === "edit") {
       setIsFormVisible(true);
+      setIsClickBtnAdd(false);
       handlePauseTimer();
     }
     if (iconName === "add") {
-      setIsFormVisible(true); ///  FINISHED HERE!!!
-      // handlePauseTimer();
+      setIsFormVisible(true);
+      setIsClickBtnAdd(true);
+    }
+    if (iconName === "alarm" && currentTimer.remainingTime === "00 : 00 : 00") {
+      setIsTimerUp(true);
     }
   };
 
@@ -61,18 +105,24 @@ export default function App() {
     setIsFormVisible(false);
   };
 
-  const handleEditChange = (e) => {
+  const handleTimeChange = (e) => {
     const updatedValue = e.target.value;
 
     const isValidFormat = /^\d{0,2} : \d{0,2} : \d{0,2}$/.test(updatedValue);
     if (!isValidFormat) return;
 
-    setTime(updatedValue);
+    dispatch(
+      setCurrentTimer({
+        remainingTime: updatedValue,
+        initialTime: updatedValue,
+      })
+    );
   };
 
   const handleClickSaveBtn = (time) => {
-    setTime(time);
+    dispatch(setCurrentTimer({ remainingTime: time, initialTime: time }));
     setIsFormVisible(false);
+    setIsStartingForm(false);
   };
 
   return (
@@ -80,31 +130,33 @@ export default function App() {
       <div className="container">
         {!isFormVisible && (
           <MainImg
-            time={time}
+            time={currentTimer.remainingTime}
             onClick={handleClickBtn}
             isFormVisible={isFormVisible}
             isPressedTimerBtn={isPressedTimerBtn}
+            isStartingForm={isStartingForm}
           />
         )}
 
         {isFormVisible && (
           <TimerForm
-            title="Edit the time"
+            title={isClickBtnAdd ? "Add new timer" : "Edit the time"}
             isFormVisible={isFormVisible}
             onClose={handleCloseForm}
-            onChange={handleEditChange}
-            time={time}
-            onClick={() => handleClickSaveBtn(time)}
+            onChange={handleTimeChange}
+            time={currentTimer.remainingTime}
+            onClick={() => handleClickSaveBtn(currentTimer.initialTime)}
+            isStartingForm={isStartingForm}
+            onSubmit={handleSubmit}
           />
         )}
 
-        <div className="beeContainer">
-          <Icon
-            name="bee"
-            className="beeImg"
-            onClick={() => handleClickBtn("alarm")}
-          ></Icon>
-        </div>
+        <Bee
+          time={currentTimer.remainingTime}
+          onClick={handleClickBtn}
+          isTimerUp={isTimerUp}
+          isStartingForm={isStartingForm}
+        />
       </div>
     </>
   );

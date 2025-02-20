@@ -10,17 +10,27 @@ export const TimerForm = ({
   onClick,
   time,
   isFormVisible,
+  isStartingForm,
+  onSubmit,
 }) => {
   return (
     <div className={styles.formContainer}>
-      <MainImg isFormVisible={isFormVisible} />
+      <MainImg isFormVisible={isFormVisible} isStartingForm={isStartingForm} />
 
-      <form action="">
+      <form onSubmit={onSubmit}>
         <div className={styles.formFrame}>
-          <Icon name="cross" className={styles.crossImg} onClick={onClose} />
+          {!isStartingForm && (
+            <Icon name="cross" className={styles.crossImg} onClick={onClose} />
+          )}
+          {isStartingForm && <div className={styles.emptyContainer}></div>}
           <label htmlFor="choosedPeriod">{title}</label>
         </div>
-        <input id="choosedPeriod" value={time} onChange={onChange} />
+        <input
+          id="choosedPeriod"
+          value={time}
+          onChange={onChange}
+          // placeholder="00 : 00 : 00"
+        />
         <button
           name="save"
           type="button"

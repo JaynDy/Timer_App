@@ -8,6 +8,7 @@ export const MainImg = ({
   onClick,
   isFormVisible,
   isPressedTimerBtn,
+  isStartingForm,
 }) => {
   return (
     <div className={styles.mainImgContainer}>

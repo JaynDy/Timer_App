@@ -1,6 +1,7 @@
-import { app, BrowserWindow, screen } from "electron";
+import { app, BrowserWindow, screen, ipcMain } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
+import { saveTimers, getTimers } from "./store.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,8 +27,8 @@ app.on("ready", () => {
     },
   });
 
-  const windowWidth = 200;
-  const windowHeight = 280;
+  const windowWidth = 400;
+  const windowHeight = 480;
   const margin = 30;
 
   mainWindow.setBounds({
@@ -43,7 +44,10 @@ app.on("ready", () => {
       : "http://localhost:5173"
   );
 
-  // if (!app.isPackaged) {
-  //   mainWindow.webContents.openDevTools();
-  // }
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 });
+
+ipcMain.handle("getTimers", () => getTimers());
+ipcMain.handle("saveTimers", (_, timers) => saveTimers(timers));
