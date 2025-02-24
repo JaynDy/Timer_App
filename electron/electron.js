@@ -27,6 +27,9 @@ app.on("ready", () => {
     },
   });
 
+  console.log("Electron dirname:", __dirname);
+  console.log("Preload path:", path.join(__dirname, "preload.js"));
+
   const windowWidth = 400;
   const windowHeight = 480;
   const margin = 30;

@@ -22,23 +22,33 @@ export default function App() {
   const currentTimer = useSelector((state) => state.timer.currentTimer);
   console.log("currentTimer", currentTimer);
 
-  // useEffect(() => {
-  //   if (window.electronAPI) {
-  //     window.electronAPI.getTimers().then((timers) => {
-  //       console.log("Таймеры получены:", timers);
-  //     });
-  //   } else {
-  //     // console.error("❌ window.electronAPI не найден!");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (window.electronAPI) {
+      window.electronAPI.getTimers().then((timers) => {
+        console.log("Таймеры получены:", timers);
+      });
+    } else {
+      console.error("❌ window.electronAPI не найден!");
+    }
+  }, []);
 
-  // console.log("timers", ...timers);
+  const handleAddNewTimer = (newTimer) => {
+    if (window.electronAPI) {
+      window.electronAPI.getTimers().then((timers) => {
+        console.log("Таймеры получены:", timers);
 
-  // const handleAddNewTimer = (newTimer) => {
-  //   const updatedTimers = [...timers, newTimer];
-  //   setTimers(updatedTimers);
-  //   saveTimers(updatedTimers);
-  // };
+        const updatedTimers = [...timers, newTimer];
+
+        window.electronAPI.saveTimers(updatedTimers).then(() => {
+          window.electron.getTimers().then((newTimers) => {
+            dispatch(setCurrentTimer(newTimers[newTimers.length - 1]));
+          });
+        });
+      });
+    } else {
+      console.error("❌ window.electronAPI не найден!");
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -123,6 +133,7 @@ export default function App() {
     dispatch(setCurrentTimer({ remainingTime: time, initialTime: time }));
     setIsFormVisible(false);
     setIsStartingForm(false);
+    handleAddNewTimer();
   };
 
   return (

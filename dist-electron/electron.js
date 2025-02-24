@@ -15621,6 +15621,8 @@ app.on("ready", () => {
       nodeIntegration: false
     }
   });
+  console.log("Electron dirname:", __dirname);
+  console.log("Preload path:", require$$0$1.join(__dirname, "preload.js"));
   const windowWidth = 400;
   const windowHeight = 480;
   const margin = 30;

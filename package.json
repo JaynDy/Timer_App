@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",
-    "build": "vite build && electron-builder",
+    "vite:build": "vite build",
+    "electron:build": "electron-builder",
+    "build": "npm run vite:build && npm run electron:build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "electron ."
@@ -16,7 +18,6 @@
     "electron-store": "^8.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-query": "^3.39.3",
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
@@ -36,24 +37,18 @@
     "vite": "^6.0.5",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-static-copy": "^2.2.0",
-    "wait-on": "^8.0.2"
+    "wait-on": "^8.0.2",
+    "electron-builder": "^25.1.8"
   },
   "build": {
+    "appId": "my.id",
     "files": [
       "src/**/*",
-      "electron/**/*",
-      "preload.js",
-      "store.js",
-      "dist/**/*"
+      "electron/**/*"
     ],
     "directories": {
       "buildResources": "resources"
-    },
-    "extraFiles": [
-      {
-        "from": "electron/preload.js",
-        "to": "dist-electron/preload.js"
-      }
-    ]
-  }
+    }
+  },
+  "author": "JaneD"
 }
