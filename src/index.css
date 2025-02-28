@@ -1,3 +1,13 @@
+:root {
+  --strawberry-main-color: #e64154;
+  --screen-color: #e6c4bd;
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: transparent;

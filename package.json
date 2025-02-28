@@ -18,7 +18,8 @@
     "electron-store": "^8.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -28,6 +29,7 @@
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "electron": "^34.0.2",
+    "electron-builder": "^25.1.8",
     "electron-reload": "^2.0.0-alpha.1",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.2",
@@ -37,8 +39,7 @@
     "vite": "^6.0.5",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-static-copy": "^2.2.0",
-    "wait-on": "^8.0.2",
-    "electron-builder": "^25.1.8"
+    "wait-on": "^8.0.2"
   },
   "build": {
     "appId": "my.id",
@@ -50,5 +51,5 @@
       "buildResources": "resources"
     }
   },
-  "author": "JaneD"
+  "author": "Jane"
 }

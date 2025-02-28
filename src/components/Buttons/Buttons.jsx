@@ -2,20 +2,28 @@ import React from "react";
 import styles from "./Buttons.module.css";
 import { Icon } from "../Icon/Icon";
 
-export const Buttons = ({ onClick, isPressedTimerBtn }) => {
+export const Buttons = ({ onClick, timerState }) => {
   return (
     <div className={styles.btnContainer}>
-      {!isPressedTimerBtn ? (
+      {timerState === "idle" && (
         <Icon
           name="timer"
           className={styles.btn}
           onClick={() => onClick("start")}
         />
-      ) : (
+      )}
+      {timerState === "running" && (
         <Icon
-          name="pause1"
+          name="pause"
           className={styles.btn}
           onClick={() => onClick("pause")}
+        />
+      )}
+      {timerState === "paused" && (
+        <Icon
+          name="play"
+          className={styles.btn}
+          onClick={() => onClick("play")}
         />
       )}
 

@@ -1,0 +1,43 @@
+.dropdown {
+  position: fixed;
+  top: var(--dropdown-top);
+  left: var(--dropdown-left);
+  width: 24px;
+  overflow: hidden;
+  background: var(--screen-color);
+  border-radius: 5px;
+  z-index: 100;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+
+.scrollContainer {
+  height: 32px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+  scroll-snap-type: y mandatory;
+  background: #88e518;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.option {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: green;
+  cursor: pointer;
+  scroll-snap-align: center;
+  padding: 4px 0;
+  margin: 2px 0;
+}
+
+.option:hover {
+  /* background: #eb9292; */
+}

@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 500px;
-  height: 100vh;
+  max-width: 200px;
+  height: 280px;
   -webkit-app-region: drag;
   position: relative;
 }

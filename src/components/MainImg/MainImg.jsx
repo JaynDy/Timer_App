@@ -3,13 +3,7 @@ import styles from "./MainImg.module.css";
 import { Icon } from "../Icon/Icon";
 import { Buttons } from "../Buttons/Buttons";
 
-export const MainImg = ({
-  time,
-  onClick,
-  isFormVisible,
-  isPressedTimerBtn,
-  isStartingForm,
-}) => {
+export const MainImg = ({ time, onClick, isFormVisible, timerState }) => {
   return (
     <div className={styles.mainImgContainer}>
       <Icon name="strawberry" />
@@ -20,7 +14,7 @@ export const MainImg = ({
           <Buttons
             onClick={onClick}
             isFormVisible={isFormVisible}
-            isPressedTimerBtn={isPressedTimerBtn}
+            timerState={timerState}
           />
         </div>
       )}

@@ -1,7 +1,8 @@
 .alarmContainer {
   position: absolute;
-  bottom: 75%;
-  left: 65%;
+  top: 0%;
+  left: 60%;
+  margin-right: 15px;
 }
 .alarmAnimation {
   animation: shake 0.5s ease-in-out infinite;
