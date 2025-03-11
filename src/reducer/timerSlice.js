@@ -4,7 +4,7 @@ export const initialState = {
   id: "",
   initialTime: "00 : 00 : 00",
   remainingTime: "00 : 00 : 00",
-  isChecked: "false",
+  isSelected: "false",
 };
 
 export const timerSlice = createSlice({

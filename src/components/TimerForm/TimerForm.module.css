@@ -17,17 +17,18 @@ form {
 }
 label {
   font-family: Georgia, "Times New Roman", Times, serif;
-  /* color: rgb(124, 26, 185); */
   background: linear-gradient(
     to right,
     red,
     orange,
-    yellow,
+    rgb(101, 101, 4),
     green,
     cyan,
     blue,
-    violet
+    rgb(118, 3, 118)
   );
+
+  /* color: rgb(232, 220, 48); */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: large;
@@ -63,9 +64,27 @@ img.crossImg {
   font-size: 14px;
   font-weight: bolder;
 }
-
+input {
+  border: none;
+  outline: none;
+  background-color: var(--screen-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: green;
+  font-size: 14px;
+  font-weight: bolder;
+  width: 24px;
+  -webkit-app-region: no-drag;
+  box-shadow: 0 0 5px green;
+  border-radius: 5px;
+}
 .timeSegment {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  outline: none;
 }
 .timeSegment span {
   -webkit-app-region: no-drag;

@@ -10,7 +10,7 @@ export const MainImg = ({ time, onClick, isFormVisible, timerState }) => {
       <Icon name="screen" className={styles.screenImg} />
       {!isFormVisible && (
         <div>
-          <h3>{time}</h3>
+          <h3 className={styles.labelTime}>{time}</h3>
           <Buttons
             onClick={onClick}
             isFormVisible={isFormVisible}

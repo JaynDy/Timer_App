@@ -30,8 +30,8 @@ app.on("ready", () => {
   console.log("Electron dirname:", __dirname);
   console.log("Preload path:", path.join(__dirname, "preload.js"));
 
-  const windowWidth = 200;
-  const windowHeight = 280;
+  const windowWidth = 400;
+  const windowHeight = 780;
   const margin = 30;
 
   mainWindow.setBounds({
@@ -47,9 +47,9 @@ app.on("ready", () => {
       : "http://localhost:5173"
   );
 
-  // if (!app.isPackaged) {
-  //   mainWindow.webContents.openDevTools();
-  // }
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 
   ipcMain.handle("getTimers", () => getTimers());
 

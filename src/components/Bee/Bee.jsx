@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import styles from "./Bee.module.css";
 import { Icon } from "../Icon/Icon";
 
-export const Bee = ({ time, isFinishedCountDown, onClick, isStartingForm }) => {
+export const Bee = ({ time, isFinishedCountDown, onClick, isFormVisible }) => {
   useEffect(() => {
     const alarmElement = document.querySelector(`.${styles.alarmContainer}`);
 
-    if (!isStartingForm && time === "00 : 00 : 00" && !isFinishedCountDown) {
+    if (!isFormVisible && time === "00 : 00 : 00" && !isFinishedCountDown) {
       alarmElement.classList.add(styles.alarmAnimation);
     } else {
       alarmElement.classList.remove(styles.alarmAnimation);

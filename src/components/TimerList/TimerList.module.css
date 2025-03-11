@@ -1,0 +1,128 @@
+.timerList {
+  position: absolute;
+  top: 28%;
+  z-index: 1000;
+  margin: 0;
+  background-color: var(--screen-color);
+  border-radius: 33px;
+  width: 85%;
+  height: 45%;
+  perspective: 1500px;
+  border: 2px solid green;
+  -webkit-app-region: no-drag;
+  overflow: visible;
+  will-change: transform, opacity;
+}
+
+.labelList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    rgb(150, 150, 6),
+    green,
+    cyan,
+    blue,
+    violet
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-app-region: no-drag;
+  margin: 0;
+}
+.listTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 5px 0 0;
+  -webkit-app-region: no-drag;
+}
+img.crossImg {
+  width: 15px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  list-style: none;
+  padding: 0 5px 0 8px;
+  margin: 0 5px 0 0;
+  overflow-y: auto;
+  max-height: calc(100% - 50px);
+  -webkit-app-re0gion: no-drag;
+}
+ul::-webkit-scrollbar {
+  width: 4px;
+  -webkit-app-re0gion: no-drag;
+}
+ul::-webkit-scrollbar-thumb {
+  background-color: green;
+  border-radius: 3px;
+  -webkit-app-re0gion: no-drag;
+}
+li.timerItem {
+  color: green;
+  font-size: 14px;
+  font-weight: bolder;
+  border-bottom: 1px dotted rgb(94, 167, 94);
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+li:last-child {
+  border: none;
+  -webkit-app-region: no-drag;
+}
+.itemContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 85%;
+  -webkit-app-region: no-drag;
+}
+
+.btnContainer {
+  width: 13%;
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.checkbox {
+  max-width: 13px;
+  height: 13px;
+  cursor: pointer;
+  border: 1px solid green;
+  border-radius: 4px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, border-color 0.2s;
+  -webkit-app-region: no-drag;
+}
+.checkbox:checked {
+  accent-color: green;
+}
+.checkbox:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 7px;
+  font-weight: bold;
+}
+.checkbox:hover {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  border-color: #4caf50;
+}
+.btn {
+  width: 13px !important;
+}

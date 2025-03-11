@@ -38,6 +38,12 @@ export const Buttons = ({ onClick, timerState }) => {
         className={styles.btn}
         onClick={() => onClick("settings")}
       />
+      {/* <Icon
+        name="settings"
+        className={styles.btn}
+        // onClick={() => onClick("delete")}
+        onClick={() => onClick("deleteAll")}
+      /> */}
     </div>
   );
 };

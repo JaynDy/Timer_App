@@ -15597,14 +15597,10 @@ function requireElectronStore() {
 var electronStoreExports = /* @__PURE__ */ requireElectronStore();
 const Store = /* @__PURE__ */ getDefaultExportFromCjs(electronStoreExports);
 const store = new Store();
-const saveTimers = (newTimer) => {
-  const updatedTimers = [...store.get("timers", []), newTimer];
-  store.set("timers", updatedTimers);
-};
-const getTimers = () => {
-  const timers = store.get("timers", []);
-  console.log("getTimers", timers);
-  return timers;
+const getTimers = async () => store.get("timers", []);
+const saveTimers = async (timers) => {
+  store.set("timers", timers);
+  console.log("timers Electron", timers);
 };
 const __filename$1 = fileURLToPath(import.meta.url);
 const __dirname = require$$0$1.dirname(__filename$1);
@@ -15626,8 +15622,8 @@ app.on("ready", () => {
   });
   console.log("Electron dirname:", __dirname);
   console.log("Preload path:", require$$0$1.join(__dirname, "preload.js"));
-  const windowWidth = 200;
-  const windowHeight = 280;
+  const windowWidth = 400;
+  const windowHeight = 780;
   const margin = 30;
   mainWindow.setBounds({
     x: width - windowWidth - margin,
@@ -15638,6 +15634,9 @@ app.on("ready", () => {
   mainWindow.loadURL(
     app.isPackaged ? `file://${require$$0$1.join(__dirname, "index.html")}` : "http://localhost:5173"
   );
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
   ipcMain.handle("getTimers", () => getTimers());
   ipcMain.handle("saveTimers", (_, timers) => {
     saveTimers(timers);

@@ -6,33 +6,125 @@ import { TimerForm } from "./components/TimerForm/TimerForm";
 import { MainImg } from "./components/MainImg/MainImg";
 import { Bee } from "./components/Bee";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentTimer } from "./reducer/timerSlice";
+import { clearCurrentTimer, setCurrentTimer } from "./reducer/timerSlice";
 import { v4 as uuidv4 } from "uuid";
+import {
+  addTimer,
+  clearTimers,
+  deleteTimer,
+  loadTimers,
+  updateTimer,
+} from "./reducer/timersSlice";
+import { TimerList } from "./components/TimerList";
 
 export default function App() {
-  const [isStartingForm, setIsStartingForm] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(true);
+  const [isListVisible, setIsListVisible] = useState(false);
   const [timerState, setTimerState] = useState("idle"); // idle (show btn START), running (show btn PAUSE), paused (show btn PLAY )
   const [isFinishedCountDown, setIsFinishedCountDown] = useState(false);
   const [isClickBtnAdd, setIsClickBtnAdd] = useState(true);
+  const [selectedTimerId, setSelectedTimerId] = useState(null);
+
   const timeRef = useRef(null);
 
   const dispatch = useDispatch();
   const currentTimer = useSelector((state) => state.timer.currentTimer);
   console.log("currentTimer", currentTimer);
 
-  console.log("window.electronAPI:", window.electronAPI);
+  const timers = useSelector((state) => state.timers);
+  console.log("timers redux", timers);
 
-  const handleAddTimer = (newTimer) => {
-    window.electronAPI
-      .saveTimers(newTimer)
-      .then(() => console.log("IPC-a message sent!"));
-    console.log("newTimer", newTimer);
+  useEffect(() => {
+    const preselectedTimer = timers.find((timer) => timer.isSelected);
+    if (preselectedTimer) {
+      setSelectedTimerId(preselectedTimer.id);
+    }
+    if (timers.length === 0) {
+      setIsFormVisible(true);
+      setIsListVisible(false);
+    }
+  }, [timers]);
+
+  const handleCheckbox = (timerId) => {
+    const newSelectedTimer = timerId === selectedTimerId ? null : timerId;
+    setSelectedTimerId(newSelectedTimer);
+    handleClickBtn("toggle", timerId, newSelectedTimer !== null);
+
+    const selectedTimer = timers.find((timer) => timer.id === timerId);
+    if (selectedTimer) {
+      dispatch(setCurrentTimer({ ...selectedTimer, isSelected: true }));
+      dispatch(updateTimer({ ...selectedTimer, isSelected: true }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleCloseList = () => {
+    setIsListVisible(false);
+  };
+
+  const handleDeleteTimer = (id) => {
+    dispatch(deleteTimer(id));
+  };
+
+  useEffect(() => {
+    dispatch(loadTimers());
+    console.log("Load");
+  }, [dispatch]);
+
+  useEffect(() => {
+    window.electronAPI.getTimers().then((timers) => {
+      console.log("Timers from Electron:", timers);
+      if (Array.isArray(timers)) {
+        const selectedTimer = timers.find((timer) => timer.isSelected === true);
+
+        if (selectedTimer) {
+          dispatch(setCurrentTimer(selectedTimer));
+          setIsFormVisible(false);
+        }
+      }
+    });
+  }, [dispatch]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit time:", currentTimer.initialTime);
+    if (currentTimer.remainingTime === "00 : 00 : 00") {
+      return;
+    }
+
+    const updatedTimer = {
+      id: currentTimer.id || uuidv4(),
+      remainingTime: currentTimer.initialTime,
+      initialTime: currentTimer.initialTime,
+      isSelected: true,
+    };
+
+    console.log(`App handleSubmit updatedTimer:`, updatedTimer);
+
+    const existingIndex = timers.findIndex((t) => t.id === updatedTimer.id);
+
+    if (existingIndex !== -1) {
+      dispatch(updateTimer(updatedTimer));
+    } else {
+      dispatch(addTimer(updatedTimer));
+    }
+
+    dispatch(clearCurrentTimer());
+    dispatch(setCurrentTimer(updatedTimer));
+    setIsFormVisible(false);
+  };
+
+  const handleTimeChange = (e) => {
+    const updatedValue = e.target.value;
+
+    const isValidFormat = /^\d{0,2} : \d{0,2} : \d{0,2}$/.test(updatedValue);
+    if (!isValidFormat) return;
+
+    dispatch(
+      setCurrentTimer({
+        remainingTime: updatedValue,
+        initialTime: updatedValue,
+        isSelected: false,
+      })
+    );
   };
 
   const startCountDown = () => {
@@ -71,8 +163,8 @@ export default function App() {
     timeRef.current = null;
   };
 
-  const handleClickBtn = (iconName) => {
-    console.log("click:", iconName);
+  const handleClickBtn = (iconName, id) => {
+    console.log("click:", iconName, id);
 
     switch (iconName) {
       case "alarm":
@@ -105,51 +197,64 @@ export default function App() {
         setIsFormVisible(true);
         setIsClickBtnAdd(false);
         handlePauseTimer();
+        setTimerState("paused");
         break;
 
       case "add":
+        dispatch(clearCurrentTimer());
         setIsFormVisible(true);
         setIsClickBtnAdd(true);
+        break;
+
+      case "delete":
+        if (id) {
+          handleDeleteTimer(id);
+          if (id === selectedTimerId || timers.length === 1) {
+            dispatch(clearCurrentTimer());
+            setSelectedTimerId(null);
+            setIsFormVisible(true);
+          }
+        } else {
+          console.log("Error: timer have not ID");
+        }
+        break;
+
+      case "deleteAll":
+        dispatch(clearCurrentTimer());
+        handleDeleteAllTimers();
+        break;
+
+      case "settings":
+        window.electronAPI.getTimers().then((timers) => {
+          console.log("Timers from Electron:", timers);
+          setIsListVisible(true);
+        });
+        break;
+
+      case "selectedTimer":
+        window.electronAPI.getTimers().then((timers) => {
+          console.log("Selected Timers:", timers);
+          dispatch(
+            setCurrentTimer({
+              ...currentTimer,
+              isSelected: currentTimer.isSelected,
+            })
+          );
+        });
         break;
     }
   };
 
   const handleCloseForm = (e) => {
     e.preventDefault();
-    console.log("click button cross");
     setIsFormVisible(false);
   };
 
-  const handleTimeChange = (e) => {
-    const updatedValue = e.target.value;
-
-    const isValidFormat = /^\d{0,2} : \d{0,2} : \d{0,2}$/.test(updatedValue);
-    if (!isValidFormat) return;
-
-    dispatch(
-      setCurrentTimer({
-        remainingTime: updatedValue,
-        initialTime: updatedValue,
-        isChecked: false,
-      })
-    );
-  };
-
-  const handleClickSaveBtn = () => {
-    const newTimer = {
-      id: uuidv4(),
-      remainingTime: currentTimer.initialTime,
-      initialTime: currentTimer.initialTime,
-      isChecked: true,
-    };
-
-    dispatch(setCurrentTimer(newTimer));
-
-    setIsFormVisible(false);
-    setIsStartingForm(false);
-
-    console.log("Отправка в Electron:", newTimer);
-    handleAddTimer(newTimer);
+  const handleDeleteAllTimers = () => {
+    window.electronAPI.clearAllTimers().then(() => {
+      console.log(`Timers are deleted`);
+      dispatch(clearTimers());
+    });
   };
 
   return (
@@ -165,7 +270,6 @@ export default function App() {
             onClick={handleClickBtn}
             isFormVisible={isFormVisible}
             timerState={timerState}
-            isStartingForm={isStartingForm}
           />
         )}
 
@@ -176,16 +280,24 @@ export default function App() {
             onClose={handleCloseForm}
             onChange={handleTimeChange}
             time={currentTimer.remainingTime}
-            onClick={() => handleClickSaveBtn(currentTimer.initialTime)}
-            isStartingForm={isStartingForm}
             onSubmit={handleSubmit}
+            timers={timers}
+          />
+        )}
+        {isListVisible && (
+          <TimerList
+            timers={timers}
+            onClose={handleCloseList}
+            onClick={handleClickBtn}
+            onChange={handleCheckbox}
+            selectedTimerId={selectedTimerId}
           />
         )}
 
         <Bee
           time={currentTimer.remainingTime}
           onClick={handleClickBtn}
-          isStartingForm={isStartingForm}
+          isFormVisible={isFormVisible}
           isFinishedCountDown={isFinishedCountDown}
         />
       </div>
