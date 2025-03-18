@@ -39,18 +39,7 @@ img.crossImg {
   -webkit-app-region: no-drag;
   cursor: pointer;
 }
-.saveBtn {
-  border: none;
-  border-radius: 8px;
-  padding: 4px 8px;
-  background-color: green;
-  color: rgb(234, 225, 225);
-  font-family: Georgia, "Times New Roman", Times, serif;
-  z-index: 10;
-  margin-top: 10%;
-  -webkit-app-region: no-drag;
-  cursor: pointer;
-}
+
 .emptyContainer {
   height: 20px;
 }
@@ -89,4 +78,30 @@ input {
 .timeSegment span {
   -webkit-app-region: no-drag;
   cursor: pointer;
+}
+
+.btnContainer {
+  display: flex;
+  gap: 5px;
+  margin-top: 10%;
+}
+
+.saveBtn,
+.addTimerBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: green;
+  color: rgb(234, 225, 225);
+  z-index: 10;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+.addTimerBtn.available {
+  color: cyan;
+  background-color: rgb(118, 3, 118);
+}
+.addTimerBtn {
+  color: rgb(234, 225, 225);
+  background-color: gray;
 }

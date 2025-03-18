@@ -4,7 +4,9 @@ export const initialState = {
   id: "",
   initialTime: "00 : 00 : 00",
   remainingTime: "00 : 00 : 00",
-  isSelected: "false",
+  isSelected: false,
+  isMain: false,
+  mainTimerId: null,
 };
 
 export const timerSlice = createSlice({
@@ -23,8 +25,37 @@ export const timerSlice = createSlice({
     clearCurrentTimer: (state) => {
       state.currentTimer = initialState;
     },
+
+    saveAdditionalTimer: (state, action) => {
+      const { mainTimerId, additionalTimerId } = action.payload;
+
+      // state.timers = state.timers.map((timer) => {
+      //   if (timer.id === mainTimerId) {
+      //     return { ...timer, isSelected: true };
+      //   }
+      //   if (timer.id === additionalTimerId) {
+      //     return { ...timer, isSelected: false };
+      //   }
+      //   return timer;
+      // });
+
+      state.currentTimer = {
+        ...state.currentTimer,
+        isSelected: state.currentTimer.id === mainTimerId,
+      };
+    },
+
+    clearCurrentTimerExceptMainId: (state, action) => {
+      const { mainTimerId } = state.currentTimer;
+      state.currentTimer = { ...initialState, mainTimerId };
+    },
   },
 });
 
-export const { setCurrentTimer, clearCurrentTimer } = timerSlice.actions;
+export const {
+  setCurrentTimer,
+  clearCurrentTimer,
+  clearCurrentTimerExceptMainId,
+  saveAdditionalTimer,
+} = timerSlice.actions;
 export default timerSlice.reducer;

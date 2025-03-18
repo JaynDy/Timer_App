@@ -26,6 +26,28 @@ export const timersSlice = createSlice({
       return updatedTimers;
     },
 
+    // addTimer: (state, action) => {
+    //   const { isMain, mainTimerId } = action.payload;
+
+    //   const updatedTimers = state.map((timer) => {
+    //     if (isMain) {
+    //       return { ...timer, isSelected: false };
+    //     }
+
+    //     return timer.id === mainTimerId
+    //       ? { ...timer, isSelected: true }
+    //       : timer;
+    //   });
+
+    //   updatedTimers.push({
+    //     ...action.payload,
+    //     isSelected: isMain ? true : false,
+    //   });
+
+    //   window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
+    //   return updatedTimers;
+    // },
+
     updateTimer: (state, action) => {
       const updatedState = state.map((timer) =>
         timer.id === action.payload.id

@@ -14,6 +14,7 @@ import bee from "../../img/bee.png?react";
 import trayBee from "../../img/traybee.png?react";
 import trash from "../../img/paper-bin.png?react";
 import clip from "../../img/paper-clip.png?react";
+import editPencil from "../../img/edit-pencil.png?react";
 
 export const iconsMap = {
   strawberry,
@@ -32,4 +33,5 @@ export const iconsMap = {
   trayBee,
   trash,
   clip,
+  editPencil,
 };

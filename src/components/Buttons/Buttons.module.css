@@ -11,3 +11,10 @@
   -webkit-app-region: no-drag;
   cursor: pointer;
 }
+.trashBtn {
+  width: 23px !important;
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 83%;
+  left: 45%;
+}

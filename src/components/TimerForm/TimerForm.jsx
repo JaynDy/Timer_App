@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./TimerForm.module.css";
 import { Icon } from "../Icon/Icon";
 import { MainImg } from "../MainImg/MainImg";
@@ -13,11 +13,24 @@ export const TimerForm = ({
   isStartingForm,
   onSubmit,
   timers,
+  isClickAdditionalTimerBtn,
+  currentTimer,
 }) => {
   const [activDropdown, setActiveDropdown] = useState(null);
   const [activManualInput, setActiveManualInput] = useState(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const spanRefs = useRef({});
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (activManualInput && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.setSelectionRange(
+        inputRef.current.value.length,
+        inputRef.current.value.length
+      );
+    }
+  }, [activManualInput]);
 
   const handleOpenDropdown = (type, event) => {
     setActiveDropdown((prev) => (prev === type ? null : type));
@@ -77,37 +90,43 @@ export const TimerForm = ({
 
       <form onSubmit={onSubmit}>
         <div className={styles.formFrame}>
-          {isFormVisible && (
+          {isFormVisible && timers.length !== 0 && (
             <Icon name="cross" className={styles.crossImg} onClick={onClose} />
           )}
-          {!isFormVisible && <div className={styles.emptyContainer}></div>}
+          {isFormVisible && timers.length === 0 && (
+            <div className={styles.emptyContainer}></div>
+          )}
           <label htmlFor="choosedPeriod">{title}</label>
         </div>
 
-        <div className={styles.timerInput}>
+        <div
+          className={styles.timerInput}
+          onMouseDown={(e) => {
+            if (!e.target.closest("input")) {
+              handleBlure(activManualInput?.type);
+            }
+          }}
+        >
           {["hours", "minutes", "secondes"].map((type, index, arr) => (
             <div
               key={type}
               className={styles.timeSegment}
-              onDoubleClick={() =>
+              onDoubleClick={() => {
+                if (activManualInput?.type) {
+                  handleBlure(activManualInput.type);
+                }
                 setActiveManualInput({
                   type,
                   value: time.split(" : ")[index],
-                })
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setActiveManualInput({
-                    type,
-                    value: time.split(" : ")[index],
-                  });
-                }
+                });
               }}
+              onKeyDown={(e) => handleKeyDown(type, e)}
               tabIndex={0}
             >
               {activManualInput?.type === type ? (
                 <>
                   <input
+                    ref={inputRef}
                     type="text"
                     value={activManualInput.value}
                     onChange={(e) => handleManualInput(type, e)}
@@ -135,6 +154,7 @@ export const TimerForm = ({
                       selectedValue={time.split(" : ")[index]}
                       top={dropdownPosition.top}
                       left={dropdownPosition.left}
+                      time={time}
                     />
                   )}
                   {index < arr.length - 1 && (
@@ -146,9 +166,29 @@ export const TimerForm = ({
           ))}
         </div>
 
-        <button name="save" type="submit" className={styles.saveBtn}>
-          Save
-        </button>
+        <div className={styles.btnContainer}>
+          <button
+            name="save"
+            type="submit"
+            className={styles.saveBtn}
+            onClick={(e) => onSubmit(e, "save")}
+          >
+            Save
+          </button>
+          {!isClickAdditionalTimerBtn && currentTimer.mainTimerId === null && (
+            <button
+              name="additionalTimer"
+              type="button"
+              className={`${styles.addTimerBtn} ${
+                time !== "00 : 00 : 00" ? styles.available : ""
+              }`}
+              disabled={time === "00 : 00 : 00"}
+              onClick={(e) => onSubmit(e, "additionalTimer")}
+            >
+              Add timer
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
