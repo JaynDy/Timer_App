@@ -90,10 +90,9 @@ export const TimerForm = ({
 
       <form onSubmit={onSubmit}>
         <div className={styles.formFrame}>
-          {isFormVisible && timers.length !== 0 && (
+          {isFormVisible && timers.length !== 0 ? (
             <Icon name="cross" className={styles.crossImg} onClick={onClose} />
-          )}
-          {isFormVisible && timers.length === 0 && (
+          ) : (
             <div className={styles.emptyContainer}></div>
           )}
           <label htmlFor="choosedPeriod">{title}</label>
@@ -170,8 +169,10 @@ export const TimerForm = ({
           <button
             name="save"
             type="submit"
-            className={styles.saveBtn}
-            onClick={(e) => onSubmit(e, "save")}
+            className={`${styles.saveBtn} ${
+              time !== "00 : 00 : 00" ? styles.available : ""
+            } `}
+            onClick={(e) => onSubmit(e, "save", currentTimer.mainTimerId)}
           >
             Save
           </button>
@@ -183,7 +184,7 @@ export const TimerForm = ({
                 time !== "00 : 00 : 00" ? styles.available : ""
               }`}
               disabled={time === "00 : 00 : 00"}
-              onClick={(e) => onSubmit(e, "additionalTimer")}
+              onClick={(e) => onSubmit(e, "additionalTimer", currentTimer.id)}
             >
               Add timer
             </button>

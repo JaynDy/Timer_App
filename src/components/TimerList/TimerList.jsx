@@ -9,31 +9,39 @@ export const TimerList = ({
   onClick,
   onChange,
   selectedTimerId,
+  clickedTimerId,
   isAdditionListVisible,
+  setIsAdditionListVisible,
+  setIsListVisible,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSettings, setIsOpenSettings] = useState(false);
 
   useEffect(() => {
-    setIsOpen(true);
+    setIsOpenSettings(true);
   }, []);
 
   const animationStyles = useSpring({
-    opacity: isOpen ? 1 : 0,
-    // visibility: isOpen ? "visible" : "hidden",
-    // transform: isOpen ? "scaleY(1)" : "scaleY(0)",
+    opacity: isOpenSettings ? 1 : 0,
+    // visibility: isOpenSettings ? "visible" : "hidden",
+    // transform: isOpenSettings ? "scaleY(1)" : "scaleY(0)",
     transformOrigin: "top",
-    pointerEvents: isOpen ? "auto" : "none",
+    pointerEvents: isOpenSettings ? "auto" : "none",
     config: { mass: 1, tension: 150, friction: 20 },
-    boxShadow: isOpen
+    boxShadow: isOpenSettings
       ? "0px 10px 20px rgba(0, 0, 0, 0.3)"
       : "0px -10px 20px rgba(0, 0, 0, 0.5) inset",
     onRest: () => {
-      if (!isOpen) onClose();
+      if (!isOpenSettings) onClose();
     },
   });
 
   const handleClose = () => {
-    setIsOpen(false);
+    if (isAdditionListVisible) {
+      setIsAdditionListVisible(false);
+      setIsListVisible(true);
+    } else {
+      setIsOpenSettings(false);
+    }
   };
 
   return (
@@ -81,7 +89,9 @@ export const TimerList = ({
                       />
                     )}
 
-                    {(timer.id !== selectedTimerId || timers.length === 1) && (
+                    {(timer.id !== selectedTimerId ||
+                      (timer.id === selectedTimerId &&
+                        timers.filter((t) => !t.mainTimerId).length === 1)) && (
                       <Icon
                         name="trash"
                         className={styles.trashBtn}
@@ -93,19 +103,21 @@ export const TimerList = ({
               )}
               {isAdditionListVisible &&
                 !timer.isMain &&
-                timer.mainTimerId === selectedTimerId && (
+                timer.mainTimerId === clickedTimerId && (
                   <div className={styles.itemContainer}>
                     <span className={styles.timerValue}>
                       {timer.remainingTime}
                     </span>
                     <div className={styles.btnContainer}>
-                      {(timer.id !== selectedTimerId ||
-                        timers.length === 1) && (
+                      {timer.id !== selectedTimerId && (
                         <>
                           <Icon
                             name="editPencil"
                             className={styles.btn}
-                            onClick={() => onClick("edit")}
+                            onClick={() => {
+                              onClick("edit", timer.id),
+                                console.log("timerID", timer.id);
+                            }}
                           />
                           <Icon
                             name="trash"

@@ -10,15 +10,27 @@ export const timersSlice = createSlice({
 
   reducers: {
     addTimer: (state, action) => {
+      const { id, isMain, mainTimerId } = action.payload;
+
       const newTimers = state.map((timer) => ({
         ...timer,
         isSelected: false,
       }));
 
-      const updatedTimers = [
-        ...newTimers,
-        { ...action.payload, isSelected: true },
-      ];
+      let updatedTimers;
+
+      if (!mainTimerId) {
+        updatedTimers = [...newTimers, { ...action.payload, isSelected: true }];
+      } else {
+        updatedTimers = [
+          ...newTimers,
+          { ...action.payload, isSelected: isMain },
+        ];
+      }
+
+      updatedTimers = updatedTimers.map((timer) =>
+        timer.id === mainTimerId ? { ...timer, isSelected: true } : timer
+      );
 
       console.log(`addTimer:`, updatedTimers);
 
@@ -26,36 +38,21 @@ export const timersSlice = createSlice({
       return updatedTimers;
     },
 
-    // addTimer: (state, action) => {
-    //   const { isMain, mainTimerId } = action.payload;
-
-    //   const updatedTimers = state.map((timer) => {
-    //     if (isMain) {
-    //       return { ...timer, isSelected: false };
-    //     }
-
-    //     return timer.id === mainTimerId
-    //       ? { ...timer, isSelected: true }
-    //       : timer;
-    //   });
-
-    //   updatedTimers.push({
-    //     ...action.payload,
-    //     isSelected: isMain ? true : false,
-    //   });
-
-    //   window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
-    //   return updatedTimers;
-    // },
-
     updateTimer: (state, action) => {
-      const updatedState = state.map((timer) =>
-        timer.id === action.payload.id
-          ? { ...timer, ...action.payload, isSelected: true }
-          : { ...timer, isSelected: false }
-      );
+      const updatedTimers = Array.isArray(action.payload)
+        ? action.payload
+        : [action.payload];
 
-      console.log(`updateTimer:`, updatedState);
+      const updatedState = state.map((timer) =>
+        updatedTimers.find((updatedTimer) => updatedTimer.id === timer.id)
+          ? {
+              ...timer,
+              ...updatedTimers.find(
+                (updatedTimer) => updatedTimer.id === timer.id
+              ),
+            }
+          : timer
+      );
 
       window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedState)));
       return updatedState;
@@ -66,7 +63,6 @@ export const timersSlice = createSlice({
         (timer) => timer.id !== action.payload
       );
       window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
-      console.log(updatedTimers);
       return updatedTimers;
     },
 

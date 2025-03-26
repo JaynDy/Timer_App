@@ -17,9 +17,8 @@ export const timerSlice = createSlice({
 
   reducers: {
     setCurrentTimer: (state, action) => {
-      //   console.log("Обновление", state.currentTimer, "на", action.payload);
       state.currentTimer = { ...state.currentTimer, ...action.payload };
-      console.log("Updated currentTimer state:", state.currentTimer);
+      // console.log("Updated currentTimer state:", state.currentTimer);
     },
 
     clearCurrentTimer: (state) => {
@@ -28,16 +27,6 @@ export const timerSlice = createSlice({
 
     saveAdditionalTimer: (state, action) => {
       const { mainTimerId, additionalTimerId } = action.payload;
-
-      // state.timers = state.timers.map((timer) => {
-      //   if (timer.id === mainTimerId) {
-      //     return { ...timer, isSelected: true };
-      //   }
-      //   if (timer.id === additionalTimerId) {
-      //     return { ...timer, isSelected: false };
-      //   }
-      //   return timer;
-      // });
 
       state.currentTimer = {
         ...state.currentTimer,

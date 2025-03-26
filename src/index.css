@@ -13,6 +13,9 @@ body {
   background: transparent;
   overflow: hidden;
   font-family: Georgia, "Times New Roman", Times, serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 h3 {
   text-align: center;
