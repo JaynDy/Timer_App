@@ -21,15 +21,22 @@ import {
   updateTimer,
 } from "./reducer/timersSlice";
 import { TimerList } from "./components/TimerList";
-import { AdditionTimers } from "./components/AdditionTimers";
+import { TimerButton } from "./components/TimerButton";
+import sound1 from "./sounds/sound1.mp3";
 
 export default function App() {
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [isListVisible, setIsListVisible] = useState(false);
   const [isAdditionListVisible, setIsAdditionListVisible] = useState(false);
 
-  const [timerState, setTimerState] = useState("idle"); // idle (show btn START), running (show btn PAUSE), paused (show btn PLAY )
+  const [timerState, setTimerState] = useState("idle"); // idle (show btn START), running (show btn PAUSE), paused (show btn PLAY), alarmIcon
   const [isFinishedCountDown, setIsFinishedCountDown] = useState(false);
+  const additionalTimersQueueRef = useRef([]);
+  const hasRunAllAdditionTimersRef = useRef(false);
+
+  const alarmSound = useRef(new Audio(sound1));
+  alarmSound.current.loop = true;
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
   const [isClickBtnAdd, setIsClickBtnAdd] = useState(true);
   const [isClickAdditionalTimerBtn, setIsClickAdditionalTimerBtn] =
@@ -44,9 +51,9 @@ export default function App() {
   const timeRef = useRef(null);
   const dispatch = useDispatch();
   const currentTimer = useSelector((state) => state.timer.currentTimer);
-  console.log("currentTimer", currentTimer);
+  // console.log("currentTimer", currentTimer);
   const timers = useSelector((state) => state.timers);
-  console.log("timers redux", timers);
+  // console.log("timers redux", timers);
 
   useEffect(() => {
     const preselectedTimer = timers.find((timer) => timer.isSelected);
@@ -82,18 +89,35 @@ export default function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (currentTimer.remainingTime === "00 : 00 : 00") setTimerState("idle");
-  }, [currentTimer.remainingTime]);
+    if (currentTimer.remainingTime === "00 : 00 : 00") {
+      if (isFinishedCountDown) {
+        setTimerState("alarmIcon");
+      } else {
+        setTimerState("idle");
+      }
+    }
+    console.log("timerState", timerState);
+    console.log("isFinishedCountDown", isFinishedCountDown);
+  }, [currentTimer.remainingTime, isFinishedCountDown, timerState]);
 
   useEffect(() => {
-    // console.log("initialTimer", initialTimer);
-    // console.log("previousCurrentTimer", previousCurrentTimer);
-    // console.log("isClickBtnAdd", isClickBtnAdd);
-    // console.log("isFormVisible", isFormVisible);
-    // console.log("isListVisible", isListVisible);
-    // console.log("isAdditionListVisible", isAdditionListVisible);
-    // console.log("selectedTimerId", selectedTimerId);
-  });
+    if (timerState === "running") {
+      startCountDown();
+    }
+  }, [currentTimer]);
+
+  useEffect(() => {
+    window.electronAPI.getSoundEnabled().then((isEnabled) => {
+      setIsSoundEnabled(isEnabled);
+    });
+  }, []);
+
+  const toggleSound = () => {
+    const newValue = !isSoundEnabled;
+    setIsSoundEnabled(newValue);
+    console.log("newValue", newValue);
+    window.electronAPI.saveSoundEnabled(newValue);
+  };
 
   const handleCheckbox = (timerId) => {
     const newSelectedTimer = timerId === selectedTimerId ? null : timerId;
@@ -252,53 +276,104 @@ export default function App() {
     );
   };
 
-  const startCountDown = () => {
-    if (timeRef.current) return;
-    let seconds = isFinishedCountDown
-      ? Math.floor(convertToSeconds(currentTimer.initialTime))
-      : Math.floor(convertToSeconds(currentTimer.remainingTime));
-
-    timeRef.current = setInterval(() => {
-      if (seconds <= 0) {
-        clearInterval(timeRef.current);
-        timeRef.current = null;
-        dispatch(setCurrentTimer({ remainingTime: "00 : 00 : 00" }));
-        return;
-      }
-      seconds--;
-      dispatch(
-        setCurrentTimer({ ...currentTimer, remainingTime: formatTime(seconds) })
-      );
-    }, 1000);
-
-    if (isFinishedCountDown) setIsFinishedCountDown(false);
-  };
-
   const handlePauseTimer = () => {
     clearInterval(timeRef.current);
     timeRef.current = null;
   };
 
+  const startCountDown = () => {
+    if (timeRef.current) return;
+    let seconds = Math.floor(convertToSeconds(currentTimer.remainingTime));
+
+    timeRef.current = setInterval(() => {
+      if (seconds <= 1) {
+        setIsFinishedCountDown(true);
+      }
+      if (seconds <= 0) {
+        clearInterval(timeRef.current);
+        timeRef.current = null;
+
+        setTimeout(() => {
+          setTimerState("alarmIcon");
+        }, 0);
+
+        return;
+      }
+      seconds--;
+
+      dispatch(
+        setCurrentTimer({
+          ...currentTimer,
+          remainingTime: formatTime(seconds),
+        })
+      );
+    }, 1000);
+
+    setIsFinishedCountDown(false);
+  };
+
   const handleClickBtn = (iconName, id) => {
-    // console.log("click:", iconName, id);
+    console.log("click:", iconName, id);
 
     switch (iconName) {
       case "alarm":
-        if (currentTimer.remainingTime === "00 : 00 : 00") {
+        if (isFinishedCountDown) {
           setIsFinishedCountDown(true);
+          setTimerState("alarmIcon");
 
-          dispatch(
-            setCurrentTimer({
-              ...currentTimer,
-              remainingTime: currentTimer.initialTime,
-            })
+          const existenceAdditionalTimers = timers.filter(
+            (timer) => timer.mainTimerId === selectedTimerId
           );
+
+          console.log("existenceAdditionalTimers", existenceAdditionalTimers);
+
+          if (
+            existenceAdditionalTimers.length > 0 &&
+            !hasRunAllAdditionTimersRef.current
+          ) {
+            if (additionalTimersQueueRef.current.length === 0) {
+              additionalTimersQueueRef.current = [...existenceAdditionalTimers];
+            }
+
+            const nextTimer = additionalTimersQueueRef.current.shift();
+            console.log("Берём следующий таймер:", nextTimer);
+
+            if (nextTimer) {
+              dispatch(setCurrentTimer(nextTimer));
+              setTimerState("running");
+              setIsFinishedCountDown(false);
+            }
+
+            if (additionalTimersQueueRef.current.length === 0) {
+              hasRunAllAdditionTimersRef.current = true;
+            }
+          } else if (hasRunAllAdditionTimersRef.current) {
+            if (additionalTimersQueueRef.current.length === 0) {
+              hasRunAllAdditionTimersRef.current = true;
+              const mainTimer = timers.find(
+                (t) => t.id === currentTimer.mainTimerId && t.isMain
+              );
+              if (mainTimer) {
+                dispatch(setCurrentTimer(mainTimer));
+                setTimerState("idle");
+              }
+            }
+          } else {
+            setTimerState("idle");
+            dispatch(
+              setCurrentTimer({
+                ...currentTimer,
+                remainingTime: currentTimer.initialTime,
+              })
+            );
+          }
         }
         break;
 
       case "start":
       case "play":
         if (currentTimer.remainingTime !== "00 : 00 : 00") {
+          hasRunAllAdditionTimersRef.current = false;
           startCountDown();
           setTimerState("running");
         }
@@ -311,9 +386,6 @@ export default function App() {
 
       case "edit":
         setInitialTimer(currentTimer);
-
-        console.log("initialTimer", initialTimer);
-
         setIsAdditionListVisible(false);
         setIsListVisible(false);
         setIsFormVisible(true);
@@ -452,14 +524,12 @@ export default function App() {
       <div className="container">
         {!isFormVisible && (
           <MainImg
-            time={
-              isFinishedCountDown
-                ? currentTimer.initialTime
-                : currentTimer.remainingTime
-            }
+            time={currentTimer.remainingTime}
             onClick={handleClickBtn}
             isFormVisible={isFormVisible}
             timerState={timerState}
+            isSoundEnabled={isSoundEnabled}
+            onToggleSound={toggleSound}
           />
         )}
 
@@ -475,14 +545,18 @@ export default function App() {
             isFormVisible={isFormVisible}
             onClose={handleCloseForm}
             onChange={handleTimeChange}
-            time={currentTimer.remainingTime}
             onSubmit={handleSubmit}
             timers={timers}
             isClickAdditionalTimerBtn={isClickAdditionalTimerBtn}
             currentTimer={currentTimer}
           />
         )}
-        <AdditionTimers timers={timers} selectedTimerId={selectedTimerId} />
+
+        <TimerButton
+          timers={timers}
+          timerState={timerState}
+          currentTimer={currentTimer}
+        />
 
         {isListVisible && (
           <TimerList
@@ -504,7 +578,8 @@ export default function App() {
           timers={timers}
           onClick={handleClickBtn}
           isFormVisible={isFormVisible}
-          isFinishedCountDown={isFinishedCountDown}
+          alarmSound={alarmSound.current}
+          isSoundEnabled={isSoundEnabled}
         />
       </div>
     </>

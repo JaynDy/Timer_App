@@ -27,6 +27,13 @@ export const Buttons = ({ onClick, timerState }) => {
             onClick={() => onClick("play")}
           />
         )}
+        {timerState === "alarmIcon" && (
+          <Icon
+            name="alarm"
+            className={styles.btn}
+            onClick={() => onClick("alarm")}
+          />
+        )}
 
         <Icon
           name="add"

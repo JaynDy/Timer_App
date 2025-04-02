@@ -10,6 +10,29 @@
   margin-top: 10%;
   max-width: 90%;
 }
+.volumeContainer {
+  position: absolute;
+  top: 28%;
+  left: 77%;
+}
+.volumeImg {
+  max-width: 45%;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+.mutedLine::after {
+  content: "";
+  position: absolute;
+  top: 37%;
+  left: -10%;
+  width: 60%;
+  height: 2px;
+  border-radius: 8px;
+  background-color: rgb(91, 9, 168);
+  transform: rotate(45deg);
+  transform-origin: center;
+  pointer-events: none;
+}
 .labelTime {
   position: absolute;
   top: 47%;

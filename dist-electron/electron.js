@@ -1,5 +1,5 @@
 import require$$1$2, { app, screen, BrowserWindow, ipcMain } from "electron";
-import require$$0$1 from "path";
+import path from "path";
 import { fileURLToPath } from "url";
 import require$$1$1 from "util";
 import require$$0 from "fs";
@@ -34,8 +34,8 @@ function requireDotProp() {
     "constructor"
   ]);
   const isValidPath = (pathSegments) => !pathSegments.some((segment) => disallowedKeys.has(segment));
-  function getPathSegments(path) {
-    const pathArray = path.split(".");
+  function getPathSegments(path2) {
+    const pathArray = path2.split(".");
     const parts = [];
     for (let i = 0; i < pathArray.length; i++) {
       let p = pathArray[i];
@@ -51,11 +51,11 @@ function requireDotProp() {
     return parts;
   }
   dotProp = {
-    get(object, path, value) {
-      if (!isObj2(object) || typeof path !== "string") {
+    get(object, path2, value) {
+      if (!isObj2(object) || typeof path2 !== "string") {
         return value === void 0 ? object : value;
       }
-      const pathArray = getPathSegments(path);
+      const pathArray = getPathSegments(path2);
       if (pathArray.length === 0) {
         return;
       }
@@ -70,12 +70,12 @@ function requireDotProp() {
       }
       return object === void 0 ? value : object;
     },
-    set(object, path, value) {
-      if (!isObj2(object) || typeof path !== "string") {
+    set(object, path2, value) {
+      if (!isObj2(object) || typeof path2 !== "string") {
         return object;
       }
       const root = object;
-      const pathArray = getPathSegments(path);
+      const pathArray = getPathSegments(path2);
       for (let i = 0; i < pathArray.length; i++) {
         const p = pathArray[i];
         if (!isObj2(object[p])) {
@@ -88,11 +88,11 @@ function requireDotProp() {
       }
       return root;
     },
-    delete(object, path) {
-      if (!isObj2(object) || typeof path !== "string") {
+    delete(object, path2) {
+      if (!isObj2(object) || typeof path2 !== "string") {
         return false;
       }
-      const pathArray = getPathSegments(path);
+      const pathArray = getPathSegments(path2);
       for (let i = 0; i < pathArray.length; i++) {
         const p = pathArray[i];
         if (i === pathArray.length - 1) {
@@ -105,11 +105,11 @@ function requireDotProp() {
         }
       }
     },
-    has(object, path) {
-      if (!isObj2(object) || typeof path !== "string") {
+    has(object, path2) {
+      if (!isObj2(object) || typeof path2 !== "string") {
         return false;
       }
-      const pathArray = getPathSegments(path);
+      const pathArray = getPathSegments(path2);
       if (pathArray.length === 0) {
         return false;
       }
@@ -246,21 +246,21 @@ var hasRequiredLocatePath;
 function requireLocatePath() {
   if (hasRequiredLocatePath) return locatePath.exports;
   hasRequiredLocatePath = 1;
-  const path = require$$0$1;
+  const path$1 = path;
   const pathExists2 = requirePathExists();
   const pLocate2 = requirePLocate();
   locatePath.exports = (iterable, options) => {
     options = Object.assign({
       cwd: process.cwd()
     }, options);
-    return pLocate2(iterable, (el) => pathExists2(path.resolve(options.cwd, el)), options);
+    return pLocate2(iterable, (el) => pathExists2(path$1.resolve(options.cwd, el)), options);
   };
   locatePath.exports.sync = (iterable, options) => {
     options = Object.assign({
       cwd: process.cwd()
     }, options);
     for (const el of iterable) {
-      if (pathExists2.sync(path.resolve(options.cwd, el))) {
+      if (pathExists2.sync(path$1.resolve(options.cwd, el))) {
         return el;
       }
     }
@@ -271,39 +271,39 @@ var hasRequiredFindUp;
 function requireFindUp() {
   if (hasRequiredFindUp) return findUp.exports;
   hasRequiredFindUp = 1;
-  const path = require$$0$1;
+  const path$1 = path;
   const locatePath2 = requireLocatePath();
   findUp.exports = (filename, opts = {}) => {
-    const startDir = path.resolve(opts.cwd || "");
-    const { root } = path.parse(startDir);
+    const startDir = path$1.resolve(opts.cwd || "");
+    const { root } = path$1.parse(startDir);
     const filenames = [].concat(filename);
     return new Promise((resolve2) => {
       (function find(dir) {
         locatePath2(filenames, { cwd: dir }).then((file) => {
           if (file) {
-            resolve2(path.join(dir, file));
+            resolve2(path$1.join(dir, file));
           } else if (dir === root) {
             resolve2(null);
           } else {
-            find(path.dirname(dir));
+            find(path$1.dirname(dir));
           }
         });
       })(startDir);
     });
   };
   findUp.exports.sync = (filename, opts = {}) => {
-    let dir = path.resolve(opts.cwd || "");
-    const { root } = path.parse(dir);
+    let dir = path$1.resolve(opts.cwd || "");
+    const { root } = path$1.parse(dir);
     const filenames = [].concat(filename);
     while (true) {
       const file = locatePath2.sync(filenames, { cwd: dir });
       if (file) {
-        return path.join(dir, file);
+        return path$1.join(dir, file);
       }
       if (dir === root) {
         return null;
       }
-      dir = path.dirname(dir);
+      dir = path$1.dirname(dir);
     }
   };
   return findUp.exports;
@@ -322,42 +322,42 @@ var hasRequiredEnvPaths;
 function requireEnvPaths() {
   if (hasRequiredEnvPaths) return envPaths.exports;
   hasRequiredEnvPaths = 1;
-  const path = require$$0$1;
+  const path$1 = path;
   const os = require$$1;
   const homedir = os.homedir();
   const tmpdir = os.tmpdir();
   const { env } = process;
   const macos = (name) => {
-    const library = path.join(homedir, "Library");
+    const library = path$1.join(homedir, "Library");
     return {
-      data: path.join(library, "Application Support", name),
-      config: path.join(library, "Preferences", name),
-      cache: path.join(library, "Caches", name),
-      log: path.join(library, "Logs", name),
-      temp: path.join(tmpdir, name)
+      data: path$1.join(library, "Application Support", name),
+      config: path$1.join(library, "Preferences", name),
+      cache: path$1.join(library, "Caches", name),
+      log: path$1.join(library, "Logs", name),
+      temp: path$1.join(tmpdir, name)
     };
   };
   const windows = (name) => {
-    const appData = env.APPDATA || path.join(homedir, "AppData", "Roaming");
-    const localAppData = env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
+    const appData = env.APPDATA || path$1.join(homedir, "AppData", "Roaming");
+    const localAppData = env.LOCALAPPDATA || path$1.join(homedir, "AppData", "Local");
     return {
       // Data/config/cache/log are invented by me as Windows isn't opinionated about this
-      data: path.join(localAppData, name, "Data"),
-      config: path.join(appData, name, "Config"),
-      cache: path.join(localAppData, name, "Cache"),
-      log: path.join(localAppData, name, "Log"),
-      temp: path.join(tmpdir, name)
+      data: path$1.join(localAppData, name, "Data"),
+      config: path$1.join(appData, name, "Config"),
+      cache: path$1.join(localAppData, name, "Cache"),
+      log: path$1.join(localAppData, name, "Log"),
+      temp: path$1.join(tmpdir, name)
     };
   };
   const linux = (name) => {
-    const username = path.basename(homedir);
+    const username = path$1.basename(homedir);
     return {
-      data: path.join(env.XDG_DATA_HOME || path.join(homedir, ".local", "share"), name),
-      config: path.join(env.XDG_CONFIG_HOME || path.join(homedir, ".config"), name),
-      cache: path.join(env.XDG_CACHE_HOME || path.join(homedir, ".cache"), name),
+      data: path$1.join(env.XDG_DATA_HOME || path$1.join(homedir, ".local", "share"), name),
+      config: path$1.join(env.XDG_CONFIG_HOME || path$1.join(homedir, ".config"), name),
+      cache: path$1.join(env.XDG_CACHE_HOME || path$1.join(homedir, ".cache"), name),
       // https://wiki.debian.org/XDGBaseDirectorySpecification#state
-      log: path.join(env.XDG_STATE_HOME || path.join(homedir, ".local", "state"), name),
-      temp: path.join(tmpdir, username, name)
+      log: path$1.join(env.XDG_STATE_HOME || path$1.join(homedir, ".local", "state"), name),
+      temp: path$1.join(tmpdir, username, name)
     };
   };
   const envPaths$1 = (name, options) => {
@@ -686,7 +686,7 @@ function requireTemp() {
   if (hasRequiredTemp) return temp;
   hasRequiredTemp = 1;
   Object.defineProperty(temp, "__esModule", { value: true });
-  const path = require$$0$1;
+  const path$1 = path;
   const consts_1 = requireConsts();
   const fs_1 = requireFs();
   const Temp = {
@@ -721,7 +721,7 @@ function requireTemp() {
       }
     },
     truncate: (filePath) => {
-      const basename = path.basename(filePath);
+      const basename = path$1.basename(filePath);
       if (basename.length <= consts_1.LIMIT_BASENAME_LENGTH)
         return filePath;
       const truncable = /^(\.?)(.*?)((?:\.[^.]+)?(?:\.tmp-\d{10}[a-f0-9]{6})?)$/.exec(basename);
@@ -741,7 +741,7 @@ function requireDist$1() {
   hasRequiredDist$1 = 1;
   Object.defineProperty(dist$1, "__esModule", { value: true });
   dist$1.writeFileSync = dist$1.writeFile = dist$1.readFileSync = dist$1.readFile = void 0;
-  const path = require$$0$1;
+  const path$1 = path;
   const consts_1 = requireConsts();
   const fs_1 = requireFs();
   const lang_1 = requireLang();
@@ -795,7 +795,7 @@ function requireDist$1() {
             options.mode = stat.mode;
         }
       }
-      const parentPath = path.dirname(filePath);
+      const parentPath = path$1.dirname(filePath);
       await fs_1.default.mkdirAttempt(parentPath, {
         mode: consts_1.DEFAULT_FOLDER_MODE,
         recursive: true
@@ -861,7 +861,7 @@ function requireDist$1() {
             options.mode = stat.mode;
         }
       }
-      const parentPath = path.dirname(filePath);
+      const parentPath = path$1.dirname(filePath);
       fs_1.default.mkdirSyncAttempt(parentPath, {
         mode: consts_1.DEFAULT_FOLDER_MODE,
         recursive: true
@@ -4289,8 +4289,8 @@ function requireSchemes() {
       wsComponents.secure = void 0;
     }
     if (wsComponents.resourceName) {
-      const [path, query] = wsComponents.resourceName.split("?");
-      wsComponents.path = path && path !== "/" ? path : void 0;
+      const [path2, query] = wsComponents.resourceName.split("?");
+      wsComponents.path = path2 && path2 !== "/" ? path2 : void 0;
       wsComponents.query = query;
       wsComponents.resourceName = void 0;
     }
@@ -15084,7 +15084,7 @@ function requireSource() {
     Object.defineProperty(exports, "__esModule", { value: true });
     const util_1 = require$$1$1;
     const fs2 = require$$0;
-    const path = require$$0$1;
+    const path$1 = path;
     const crypto = require$$3$2;
     const assert = require$$4;
     const events_1 = require$$5;
@@ -15107,7 +15107,7 @@ function requireSource() {
     let parentDir = "";
     try {
       delete require.cache[__filename];
-      parentDir = path.dirname((_b = (_a = module.parent) === null || _a === void 0 ? void 0 : _a.filename) !== null && _b !== void 0 ? _b : ".");
+      parentDir = path$1.dirname((_b = (_a = module.parent) === null || _a === void 0 ? void 0 : _a.filename) !== null && _b !== void 0 ? _b : ".");
     } catch (_c) {
     }
     const checkValueType = (key, value) => {
@@ -15191,7 +15191,7 @@ function requireSource() {
         this.events = new events_1.EventEmitter();
         __classPrivateFieldSet(this, _Conf_encryptionKey, options.encryptionKey, "f");
         const fileExtension = options.fileExtension ? `.${options.fileExtension}` : "";
-        this.path = path.resolve(options.cwd, `${(_a2 = options.configName) !== null && _a2 !== void 0 ? _a2 : "config"}${fileExtension}`);
+        this.path = path$1.resolve(options.cwd, `${(_a2 = options.configName) !== null && _a2 !== void 0 ? _a2 : "config"}${fileExtension}`);
         const fileStore = this.store;
         const store2 = Object.assign(createPlainObject(), options.defaults, fileStore);
         this._validate(store2);
@@ -15408,7 +15408,7 @@ function requireSource() {
         throw new Error("Config schema violation: " + errors2.join("; "));
       }
       _ensureDirectory() {
-        fs2.mkdirSync(path.dirname(this.path), { recursive: true });
+        fs2.mkdirSync(path$1.dirname(this.path), { recursive: true });
       }
       _write(value) {
         let data = this._serialize(value);
@@ -15531,7 +15531,7 @@ var hasRequiredElectronStore;
 function requireElectronStore() {
   if (hasRequiredElectronStore) return electronStore;
   hasRequiredElectronStore = 1;
-  const path = require$$0$1;
+  const path$1 = path;
   const { app: app2, ipcMain: ipcMain2, ipcRenderer, shell } = require$$1$2;
   const Conf = requireSource();
   let isInitialized = false;
@@ -15573,7 +15573,7 @@ function requireElectronStore() {
         options.projectVersion = appVersion;
       }
       if (options.cwd) {
-        options.cwd = path.isAbsolute(options.cwd) ? options.cwd : path.join(defaultCwd, options.cwd);
+        options.cwd = path$1.isAbsolute(options.cwd) ? options.cwd : path$1.join(defaultCwd, options.cwd);
       } else {
         options.cwd = defaultCwd;
       }
@@ -15602,8 +15602,13 @@ const saveTimers = async (timers) => {
   store.set("timers", timers);
   console.log("timers Electron", timers);
 };
+const getSoundEnabled = () => store.get("isSoundEnabled", true);
+const saveSoundEnabled = (isEnabled) => {
+  store.set("isSoundEnabled", isEnabled);
+  console.log("isSoundEnabled Electron", isEnabled);
+};
 const __filename$1 = fileURLToPath(import.meta.url);
-const __dirname = require$$0$1.dirname(__filename$1);
+const __dirname = path.dirname(__filename$1);
 let mainWindow;
 app.on("ready", () => {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -15613,15 +15618,19 @@ app.on("ready", () => {
     resizable: false,
     // skipTaskbar: true,
     transparent: true,
-    icon: app.isPackaged ? require$$0$1.join(process.resourcesPath, "img/bee.png") : require$$0$1.join(__dirname, "../src/img/bee.png"),
+    icon: app.isPackaged ? path.join(process.resourcesPath, "dist", "assets", "bee.png") : path.join(__dirname, "../src/img/bee.png"),
     webPreferences: {
-      preload: require$$0$1.join(__dirname, "preload.js"),
+      preload: app.isPackaged ? path.join(
+        process.resourcesPath,
+        "app.asar.unpacked",
+        "electron",
+        "preload.js"
+      ) : path.join(__dirname, "../electron/preload.js"),
       contextIsolation: true,
       nodeIntegration: false
     }
   });
-  console.log("Electron dirname:", __dirname);
-  console.log("Preload path:", require$$0$1.join(__dirname, "preload.js"));
+  console.log("Window created");
   const windowWidth = 400;
   const windowHeight = 780;
   const margin = 30;
@@ -15631,14 +15640,30 @@ app.on("ready", () => {
     width: windowWidth,
     height: windowHeight
   });
-  mainWindow.loadURL(
-    app.isPackaged ? `file://${require$$0$1.join(__dirname, "index.html")}` : "http://localhost:5173"
+  console.log(
+    "Loading URL:",
+    app.isPackaged ? `file://${path.join(__dirname, "../dist/index.html")}` : "http://localhost:5173"
   );
+  mainWindow.loadURL(
+    app.isPackaged ? `file://${path.join(__dirname, "../dist/index.html")}` : "http://localhost:5173"
+  );
+  mainWindow.once("ready-to-show", () => {
+    console.log("Main window is ready to show");
+    mainWindow.show();
+  });
+  mainWindow.on("unresponsive", () => {
+    console.log("Window is unresponsive");
+  });
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
+  mainWindow.show();
   ipcMain.handle("getTimers", () => getTimers());
   ipcMain.handle("saveTimers", (_, timers) => {
     saveTimers(timers);
+  });
+  ipcMain.handle("getSoundEnabled", () => getSoundEnabled());
+  ipcMain.on("saveSoundEnabled", (_, isEnabled) => {
+    saveSoundEnabled(isEnabled);
   });
 });

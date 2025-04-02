@@ -1,7 +1,12 @@
 import { app, BrowserWindow, screen, ipcMain } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
-import { saveTimers, getTimers } from "./store.js";
+import {
+  saveTimers,
+  getTimers,
+  saveSoundEnabled,
+  getSoundEnabled,
+} from "./store.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,17 +23,23 @@ app.on("ready", () => {
     // skipTaskbar: true,
     transparent: true,
     icon: app.isPackaged
-      ? path.join(process.resourcesPath, "img/bee.png")
+      ? path.join(process.resourcesPath, "dist", "assets", "bee.png")
       : path.join(__dirname, "../src/img/bee.png"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: app.isPackaged
+        ? path.join(
+            process.resourcesPath,
+            "app.asar.unpacked",
+            "electron",
+            "preload.js"
+          )
+        : path.join(__dirname, "../electron/preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
 
-  console.log("Electron dirname:", __dirname);
-  console.log("Preload path:", path.join(__dirname, "preload.js"));
+  console.log("Window created");
 
   const windowWidth = 400;
   const windowHeight = 780;
@@ -41,19 +52,41 @@ app.on("ready", () => {
     height: windowHeight,
   });
 
-  mainWindow.loadURL(
+  console.log(
+    "Loading URL:",
     app.isPackaged
-      ? `file://${path.join(__dirname, "index.html")}`
+      ? `file://${path.join(__dirname, "../dist/index.html")}`
       : "http://localhost:5173"
   );
+
+  mainWindow.loadURL(
+    app.isPackaged
+      ? `file://${path.join(__dirname, "../dist/index.html")}`
+      : "http://localhost:5173"
+  );
+
+  mainWindow.once("ready-to-show", () => {
+    console.log("Main window is ready to show");
+    mainWindow.show();
+  });
+
+  mainWindow.on("unresponsive", () => {
+    console.log("Window is unresponsive");
+  });
 
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
 
-  ipcMain.handle("getTimers", () => getTimers());
+  mainWindow.show();
 
+  ipcMain.handle("getTimers", () => getTimers());
   ipcMain.handle("saveTimers", (_, timers) => {
     saveTimers(timers);
+  });
+
+  ipcMain.handle("getSoundEnabled", () => getSoundEnabled());
+  ipcMain.on("saveSoundEnabled", (_, isEnabled) => {
+    saveSoundEnabled(isEnabled);
   });
 });

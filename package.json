@@ -44,11 +44,18 @@
   },
   "build": {
     "appId": "my.id",
+    "asar": true,
     "files": [
-      "src/**/*",
-      "electron/**/*"
+      "package.json",
+      "electron/**/*",
+      "dist/**/*"
     ],
+    "asarUnpack": [
+      "electron/preload.js"
+    ],
+    "icon": "src/img/bee.png",
     "directories": {
+      "output": "dist",
       "buildResources": "resources"
     }
   },

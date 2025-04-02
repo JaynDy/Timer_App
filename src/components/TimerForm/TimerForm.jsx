@@ -8,7 +8,6 @@ export const TimerForm = ({
   title,
   onClose,
   onChange,
-  time,
   isFormVisible,
   isStartingForm,
   onSubmit,
@@ -46,7 +45,7 @@ export const TimerForm = ({
   };
 
   const handleSelect = (type, value) => {
-    const timeParts = time.split(" : ");
+    const timeParts = currentTimer.remainingTime.split(" : ");
     if (type === "hours") timeParts[0] = value;
     if (type === "minutes") timeParts[1] = value;
     if (type === "secondes") timeParts[2] = value;
@@ -116,7 +115,7 @@ export const TimerForm = ({
                 }
                 setActiveManualInput({
                   type,
-                  value: time.split(" : ")[index],
+                  value: currentTimer.remainingTime.split(" : ")[index],
                 });
               }}
               onKeyDown={(e) => handleKeyDown(type, e)}
@@ -144,16 +143,18 @@ export const TimerForm = ({
                     onClick={(e) => handleOpenDropdown(type, e)}
                     onChange={onChange}
                   >
-                    {time.split(" : ")[index]}
+                    {currentTimer.remainingTime.split(" : ")[index]}
                   </span>
                   {activDropdown === type && (
                     <TimeDropdown
                       type={type}
                       onSelect={handleSelect}
-                      selectedValue={time.split(" : ")[index]}
+                      selectedValue={
+                        currentTimer.remainingTime.split(" : ")[index]
+                      }
                       top={dropdownPosition.top}
                       left={dropdownPosition.left}
-                      time={time}
+                      time={currentTimer.remainingTime}
                     />
                   )}
                   {index < arr.length - 1 && (
@@ -170,7 +171,9 @@ export const TimerForm = ({
             name="save"
             type="submit"
             className={`${styles.saveBtn} ${
-              time !== "00 : 00 : 00" ? styles.available : ""
+              currentTimer.remainingTime !== "00 : 00 : 00"
+                ? styles.available
+                : ""
             } `}
             onClick={(e) => onSubmit(e, "save", currentTimer.mainTimerId)}
           >
@@ -181,9 +184,11 @@ export const TimerForm = ({
               name="additionalTimer"
               type="button"
               className={`${styles.addTimerBtn} ${
-                time !== "00 : 00 : 00" ? styles.available : ""
+                currentTimer.remainingTime !== "00 : 00 : 00"
+                  ? styles.available
+                  : ""
               }`}
-              disabled={time === "00 : 00 : 00"}
+              disabled={currentTimer.remainingTime === "00 : 00 : 00"}
               onClick={(e) => onSubmit(e, "additionalTimer", currentTimer.id)}
             >
               Add timer
