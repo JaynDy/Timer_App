@@ -49,19 +49,18 @@ export const TimerList = ({
       <div className={styles.listTitle}>
         <Icon name="cross" className={styles.crossImg} onClick={handleClose} />
         <h3 className={styles.labelList}>
-          {isAdditionListVisible ? "Addition Timer list" : "Timer list"}
+          {isAdditionListVisible ? "Addition timers" : "Timer list"}
         </h3>
       </div>
 
       <ul>
         {timers
-          .filter(
-            (timer) =>
-              (!isAdditionListVisible && timer.mainTimerId === null) ||
-              (isAdditionListVisible &&
-                !timer.isMain &&
-                timer.mainTimerId !== null)
-          )
+          .filter((timer) => {
+            if (!isAdditionListVisible) {
+              return !(timer.mainTimerId !== null && !timer.isMain);
+            }
+            return !timer.isMain && timer.mainTimerId === clickedTimerId;
+          })
           .map((timer) => (
             <li key={timer.id} className={styles.timerItem}>
               {!isAdditionListVisible && timer.mainTimerId === null && (

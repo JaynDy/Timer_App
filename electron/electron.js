@@ -41,8 +41,8 @@ app.on("ready", () => {
 
   console.log("Window created");
 
-  const windowWidth = 400;
-  const windowHeight = 780;
+  const windowWidth = 230;
+  const windowHeight = 280;
   const margin = 30;
 
   mainWindow.setBounds({
@@ -74,9 +74,9 @@ app.on("ready", () => {
     console.log("Window is unresponsive");
   });
 
-  if (!app.isPackaged) {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (!app.isPackaged) {
+  //   mainWindow.webContents.openDevTools();
+  // }
 
   mainWindow.show();
 

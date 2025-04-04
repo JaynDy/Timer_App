@@ -10,9 +10,18 @@
   margin-top: 10%;
   max-width: 90%;
 }
-.volumeContainer {
+.restartImg {
   position: absolute;
   top: 28%;
+  left: 42%;
+  width: 30px !important;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+
+.volumeContainer {
+  position: absolute;
+  top: 31%;
   left: 77%;
 }
 .volumeImg {

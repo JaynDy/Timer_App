@@ -14,6 +14,7 @@ export const TimerForm = ({
   timers,
   isClickAdditionalTimerBtn,
   currentTimer,
+  timerState,
 }) => {
   const [activDropdown, setActiveDropdown] = useState(null);
   const [activManualInput, setActiveManualInput] = useState(null);
@@ -45,7 +46,10 @@ export const TimerForm = ({
   };
 
   const handleSelect = (type, value) => {
-    const timeParts = currentTimer.remainingTime.split(" : ");
+    const timeParts =
+      timerState !== "paused"
+        ? currentTimer.remainingTime.split(" : ")
+        : currentTimer.initialTime.split(" : ");
     if (type === "hours") timeParts[0] = value;
     if (type === "minutes") timeParts[1] = value;
     if (type === "secondes") timeParts[2] = value;
@@ -115,7 +119,10 @@ export const TimerForm = ({
                 }
                 setActiveManualInput({
                   type,
-                  value: currentTimer.remainingTime.split(" : ")[index],
+                  value:
+                    timerState !== "paused"
+                      ? currentTimer.remainingTime.split(" : ")[index]
+                      : currentTimer.initialTime.split(" : ")[index],
                 });
               }}
               onKeyDown={(e) => handleKeyDown(type, e)}
@@ -143,18 +150,26 @@ export const TimerForm = ({
                     onClick={(e) => handleOpenDropdown(type, e)}
                     onChange={onChange}
                   >
-                    {currentTimer.remainingTime.split(" : ")[index]}
+                    {timerState !== "paused"
+                      ? currentTimer.remainingTime.split(" : ")[index]
+                      : currentTimer.initialTime.split(" : ")[index]}
                   </span>
                   {activDropdown === type && (
                     <TimeDropdown
                       type={type}
                       onSelect={handleSelect}
                       selectedValue={
-                        currentTimer.remainingTime.split(" : ")[index]
+                        timerState !== "paused"
+                          ? currentTimer.remainingTime.split(" : ")[index]
+                          : currentTimer.initialTime.split(" : ")[index]
                       }
                       top={dropdownPosition.top}
                       left={dropdownPosition.left}
-                      time={currentTimer.remainingTime}
+                      time={
+                        timerState !== "paused"
+                          ? currentTimer.remainingTime
+                          : currentTimer.initialTime
+                      }
                     />
                   )}
                   {index < arr.length - 1 && (

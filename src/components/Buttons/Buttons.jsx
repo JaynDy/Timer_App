@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Buttons.module.css";
 import { Icon } from "../Icon/Icon";
 
-export const Buttons = ({ onClick, timerState }) => {
+export const Buttons = ({ onClick, timerState, currentTimer }) => {
   return (
     <>
       <div className={styles.btnContainer}>
@@ -37,17 +37,31 @@ export const Buttons = ({ onClick, timerState }) => {
 
         <Icon
           name="add"
-          className={styles.btn}
+          className={
+            timerState !== "running" && currentTimer.mainTimerId === null
+              ? styles.btn
+              : `${styles.btn} ${styles.disabled}`
+          }
           onClick={() => onClick("add")}
         />
         <Icon
           name="edit"
-          className={styles.btn}
+          className={
+            timerState !== "running" && currentTimer.mainTimerId === null
+              ? styles.btn
+              : `${styles.btn} ${styles.disabled}`
+          }
           onClick={() => onClick("edit")}
         />
+
         <Icon
           name="settings"
-          className={styles.btn}
+          className={
+            styles.btn
+            // timerState !== "running" && currentTimer.mainTimerId === null
+            //   ? styles.btn
+            //   : `${styles.btn} ${styles.disabled}`
+          }
           onClick={() => onClick("settings")}
         />
       </div>

@@ -4,7 +4,7 @@ import { Icon } from "../Icon/Icon";
 import { Buttons } from "../Buttons/Buttons";
 
 export const MainImg = ({
-  time,
+  currentTimer,
   onClick,
   isFormVisible,
   timerState,
@@ -18,6 +18,11 @@ export const MainImg = ({
 
       {!isFormVisible && (
         <>
+          <Icon
+            name="restart"
+            className={styles.restartImg}
+            onClick={() => onClick("restart")}
+          />
           <div className={styles.volumeContainer}>
             <Icon
               name="volume"
@@ -27,8 +32,12 @@ export const MainImg = ({
             {!isSoundEnabled && <div className={styles.mutedLine}></div>}
           </div>
           <div>
-            <h3 className={styles.labelTime}>{time}</h3>
-            <Buttons onClick={onClick} timerState={timerState} />
+            <h3 className={styles.labelTime}>{currentTimer.remainingTime}</h3>
+            <Buttons
+              onClick={onClick}
+              timerState={timerState}
+              currentTimer={currentTimer}
+            />
           </div>
         </>
       )}

@@ -17,6 +17,7 @@ import clip from "../../img/paper-clip.png?react";
 import editPencil from "../../img/edit-pencil.png?react";
 import alarm from "../../img/alarm.png?react";
 import volume from "../../img/volume.png?react";
+import restart from "../../img/restart.png?react";
 
 export const iconsMap = {
   strawberry,
@@ -38,4 +39,5 @@ export const iconsMap = {
   editPencil,
   alarm,
   volume,
+  restart,
 };
