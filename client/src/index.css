@@ -16,6 +16,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url(img/sky.jpg);
+  background-size: cover;
+  height: 100vh;
 }
 h3 {
   text-align: center;

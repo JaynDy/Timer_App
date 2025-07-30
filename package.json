@@ -1,63 +1,11 @@
 {
-  "name": "timer-app",
+  "name": "timer-full-app",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "main": "electron/electron.js",
-  "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development vite",
-    "vite:build": "vite build",
-    "electron:build": "electron-builder",
-    "build": "npm run vite:build && npm run electron:build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "electron ."
-  },
-  "dependencies": {
-    "@react-spring/web": "^9.7.5",
-    "@reduxjs/toolkit": "^2.5.1",
-    "electron-store": "^8.2.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-redux": "^9.2.0",
-    "uuidv4": "^6.2.13"
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm start --prefix server\""
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "concurrently": "^9.1.2",
-    "cross-env": "^7.0.3",
-    "electron": "^34.0.2",
-    "electron-builder": "^25.1.8",
-    "electron-reload": "^2.0.0-alpha.1",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
-    "vite": "^6.0.5",
-    "vite-plugin-electron": "^0.29.0",
-    "vite-plugin-static-copy": "^2.2.0",
-    "wait-on": "^8.0.2"
-  },
-  "build": {
-    "appId": "my.id",
-    "asar": true,
-    "files": [
-      "package.json",
-      "electron/**/*",
-      "dist/**/*"
-    ],
-    "asarUnpack": [
-      "electron/preload.js"
-    ],
-    "icon": "src/img/bee.png",
-    "directories": {
-      "output": "dist",
-      "buildResources": "resources"
-    }
-  },
-  "author": "Jane"
+    "concurrently": "^9.2.0"
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "timer": [
+    {
+      "id": "d98c9d69-393e-4e31-9833-36c1c5b3fce7",
+      "remainingTime": "00 : 00 : 05",
+      "initialTime": "00 : 00 : 05",
+      "isSelected": true,
+      "isMain": true,
+      "mainTimerId": null
+    },
+    {
+      "id": "1c337e34-ff05-4d24-96f8-b3987cbf2358",
+      "remainingTime": "00 : 00 : 03",
+      "initialTime": "00 : 00 : 03",
+      "isSelected": false,
+      "isMain": false,
+      "mainTimerId": "d98c9d69-393e-4e31-9833-36c1c5b3fce7"
+    }
+  ],
+  "isSoundEnabled": true
+}

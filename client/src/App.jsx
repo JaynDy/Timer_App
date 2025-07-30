@@ -23,6 +23,7 @@ import {
 import { TimerList } from "./components/TimerList";
 import { TimerButton } from "./components/TimerButton";
 import sound1 from "./sounds/sound1.mp3";
+import { getSoundEnabled, getTimers, saveSoundEnabled } from "./api/api.timers";
 
 export default function App() {
   const [isFormVisible, setIsFormVisible] = useState(true);
@@ -87,7 +88,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(loadTimers());
-    window.electronAPI.getTimers().then((timers) => {
+    getTimers().then((timers) => {
       if (Array.isArray(timers)) {
         const selectedTimer = timers.find((timer) => timer.isSelected === true);
 
@@ -108,7 +109,7 @@ export default function App() {
   }, [currentTimer, timerState]);
 
   useEffect(() => {
-    window.electronAPI.getSoundEnabled().then((isEnabled) => {
+    getSoundEnabled().then((isEnabled) => {
       setIsSoundEnabled(isEnabled);
     });
   }, []);
@@ -116,7 +117,7 @@ export default function App() {
   const toggleSound = () => {
     const newValue = !isSoundEnabled;
     setIsSoundEnabled(newValue);
-    window.electronAPI.saveSoundEnabled(newValue);
+    saveSoundEnabled(newValue);
   };
 
   const handleCheckbox = (timerId) => {
@@ -490,7 +491,7 @@ export default function App() {
         break;
 
       case "selectedTimer":
-        window.electronAPI.getTimers().then(() => {
+        getTimers().then(() => {
           dispatch(
             setCurrentTimer({
               ...currentTimer,
