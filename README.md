@@ -1,8 +1,11 @@
-# React + Vite
+En:
+Technologies: React + Vite, JavaScript, Redux, Electron.js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To build the application, run the command: npm run build.
+After the build, install the file timer-app Setup 0.0.0.exe (it will be located in the dist folder created after the build).
 
-Currently, two official plugins are available:
+Ru:
+Технологии: React + Vite, JavaScript, Redux, Electron.js
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Для сборки приложения команда: npm run build.
+После сборки установить файл: timer-app Setup 0.0.0.exe (будет располагаться в созданой после сборки папке dist)
