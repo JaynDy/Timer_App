@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import { useRef, useState, useEffect } from "react";
 import { convertToSeconds, formatTime } from "./utilities";
-import { Icon } from "./components/Icon/Icon";
 import { TimerForm } from "./components/TimerForm/TimerForm";
 import { MainImg } from "./components/MainImg/MainImg";
 import { Bee } from "./components/Bee";
@@ -23,6 +22,7 @@ import {
 } from "./reducer/timersSlice";
 import { TimerList } from "./components/TimerList";
 import { AdditionTimers } from "./components/AdditionTimers";
+import { getTimers } from "./api/api.timers";
 
 export default function App() {
   const [isFormVisible, setIsFormVisible] = useState(true);
@@ -61,7 +61,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(loadTimers());
-    window.electronAPI.getTimers().then((timers) => {
+    getTimers().then((timers) => {
       if (Array.isArray(timers)) {
         const selectedTimer = timers.find((timer) => timer.isSelected === true);
 
@@ -315,7 +315,7 @@ export default function App() {
         break;
 
       case "selectedTimer":
-        window.electronAPI.getTimers().then(() => {
+        getTimers().then(() => {
           dispatch(
             setCurrentTimer({
               ...currentTimer,

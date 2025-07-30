@@ -19,8 +19,6 @@ export const TimerList = ({
 
   const animationStyles = useSpring({
     opacity: isOpen ? 1 : 0,
-    // visibility: isOpen ? "visible" : "hidden",
-    // transform: isOpen ? "scaleY(1)" : "scaleY(0)",
     transformOrigin: "top",
     pointerEvents: isOpen ? "auto" : "none",
     config: { mass: 1, tension: 150, friction: 20 },

@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getTimers, saveTimers } from "../api/api.timers";
 
 export const loadTimers = createAsyncThunk("timers/loadTimers", async () => {
-  return await window.electronAPI.getTimers();
+  return await getTimers();
 });
 
 export const timersSlice = createSlice({
@@ -22,31 +23,9 @@ export const timersSlice = createSlice({
 
       console.log(`addTimer:`, updatedTimers);
 
-      window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
+      saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
       return updatedTimers;
     },
-
-    // addTimer: (state, action) => {
-    //   const { isMain, mainTimerId } = action.payload;
-
-    //   const updatedTimers = state.map((timer) => {
-    //     if (isMain) {
-    //       return { ...timer, isSelected: false };
-    //     }
-
-    //     return timer.id === mainTimerId
-    //       ? { ...timer, isSelected: true }
-    //       : timer;
-    //   });
-
-    //   updatedTimers.push({
-    //     ...action.payload,
-    //     isSelected: isMain ? true : false,
-    //   });
-
-    //   window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
-    //   return updatedTimers;
-    // },
 
     updateTimer: (state, action) => {
       const updatedState = state.map((timer) =>
@@ -57,7 +36,7 @@ export const timersSlice = createSlice({
 
       console.log(`updateTimer:`, updatedState);
 
-      window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedState)));
+      saveTimers(JSON.parse(JSON.stringify(updatedState)));
       return updatedState;
     },
 
@@ -65,13 +44,13 @@ export const timersSlice = createSlice({
       const updatedTimers = state.filter(
         (timer) => timer.id !== action.payload
       );
-      window.electronAPI.saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
+      saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
       console.log(updatedTimers);
       return updatedTimers;
     },
 
     clearTimers: () => {
-      window.electronAPI.saveTimers([]);
+      saveTimers([]);
       return [];
     },
   },
@@ -88,4 +67,5 @@ export const timersSlice = createSlice({
 
 export const { addTimer, updateTimer, deleteTimer, clearTimers } =
   timersSlice.actions;
+
 export default timersSlice.reducer;

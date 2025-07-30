@@ -29,16 +29,6 @@ export const timerSlice = createSlice({
     saveAdditionalTimer: (state, action) => {
       const { mainTimerId, additionalTimerId } = action.payload;
 
-      // state.timers = state.timers.map((timer) => {
-      //   if (timer.id === mainTimerId) {
-      //     return { ...timer, isSelected: true };
-      //   }
-      //   if (timer.id === additionalTimerId) {
-      //     return { ...timer, isSelected: false };
-      //   }
-      //   return timer;
-      // });
-
       state.currentTimer = {
         ...state.currentTimer,
         isSelected: state.currentTimer.id === mainTimerId,
