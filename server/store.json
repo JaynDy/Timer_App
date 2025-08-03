@@ -1,7 +1,7 @@
 {
   "timer": [
     {
-      "id": "d98c9d69-393e-4e31-9833-36c1c5b3fce7",
+      "id": "d3119e76-8211-43a8-b57e-909d2c06d234",
       "remainingTime": "00 : 00 : 05",
       "initialTime": "00 : 00 : 05",
       "isSelected": true,
@@ -9,13 +9,13 @@
       "mainTimerId": null
     },
     {
-      "id": "1c337e34-ff05-4d24-96f8-b3987cbf2358",
-      "remainingTime": "00 : 00 : 03",
-      "initialTime": "00 : 00 : 03",
+      "id": "e4dccdb3-03d7-4566-bb44-4049a8537d21",
+      "remainingTime": "00 : 00 : 04",
+      "initialTime": "00 : 00 : 04",
       "isSelected": false,
       "isMain": false,
-      "mainTimerId": "d98c9d69-393e-4e31-9833-36c1c5b3fce7"
+      "mainTimerId": "d3119e76-8211-43a8-b57e-909d2c06d234"
     }
   ],
-  "isSoundEnabled": true
+  "isSoundEnabled": false
 }

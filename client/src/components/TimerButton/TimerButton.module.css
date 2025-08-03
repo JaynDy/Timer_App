@@ -1,12 +1,12 @@
 .timerButtonContainer {
   position: absolute;
   top: 40%;
-  left: 78%;
+  left: 80%;
   z-index: -1;
   transition: 0.3s ease, left 0.5s ease;
 }
 .timerButtonContainer.running {
-  left: 85%;
+  left: 90%;
 }
 .btn {
   width: 50px !important;

@@ -18,8 +18,7 @@ export const saveTimers = async (timers) => {
 export const getSoundEnabled = async () => {
   const response = await fetch(`${SERVER_URL}/sound`);
   const data = await response.json();
-  console.log("isSoundEnabled:", data);
-  return data;
+  return data.isSoundEnabled;
 };
 
 export const saveSoundEnabled = async (isEnabled) => {

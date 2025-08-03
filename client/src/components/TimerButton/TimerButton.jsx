@@ -11,7 +11,7 @@ export const TimerButton = ({ timerState, prevTimerState }) => {
 
       setTimeout(() => {
         setIsButtonMoving(false);
-      }, 500);
+      }, 300);
     }
 
     prevTimerState.current = timerState;
@@ -24,7 +24,7 @@ export const TimerButton = ({ timerState, prevTimerState }) => {
         isButtonMoving ? styles.running : ""
       }`}
     >
-      <Icon name="yellowBtn" className={styles.btn}></Icon>
+      <Icon name="lightBtn" className={styles.btn}></Icon>
     </div>
   );
 };

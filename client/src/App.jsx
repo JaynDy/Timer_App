@@ -26,6 +26,8 @@ import sound1 from "./sounds/sound1.mp3";
 import { getSoundEnabled, getTimers, saveSoundEnabled } from "./api/api.timers";
 
 export default function App() {
+  const dispatch = useDispatch();
+
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [isListVisible, setIsListVisible] = useState(false);
   const [isAdditionListVisible, setIsAdditionListVisible] = useState(false);
@@ -52,11 +54,11 @@ export default function App() {
   const [previousCurrentTimer, setPreviousCurrentTimer] = useState(null);
 
   const timeRef = useRef(null);
-  const dispatch = useDispatch();
+
   const currentTimer = useSelector((state) => state.timer.currentTimer);
-  console.log("currentTimer", currentTimer);
+  // console.log("currentTimer", currentTimer);
   const timers = useSelector((state) => state.timers);
-  console.log("timers redux", timers);
+  // console.log("timers redux", timers);
 
   useEffect(() => {
     const preselectedTimer = timers.find((timer) => timer.isSelected);
@@ -74,16 +76,21 @@ export default function App() {
         dispatch(setCurrentTimer({ mainTimerId: updatedMainTimer.id }));
       }
     }
-  }, [timers, isClickAdditionalTimerBtn, isListVisible]);
+  }, [timers, isClickAdditionalTimerBtn, isListVisible, currentTimer]);
 
   useEffect(() => {
-    console.log("isClickBtnAdd", isClickBtnAdd);
-    console.log("isClickAdditionalTimerBtn", isClickAdditionalTimerBtn);
-    console.log("isFormVisible", isFormVisible);
-    console.log("isListVisible", isListVisible);
-    console.log("isAdditionListVisible", isAdditionListVisible);
-    console.log("initialTimer", initialTimer);
-    console.log("previousCurrentTimer", previousCurrentTimer);
+    // console.log("isClickBtnAdd", isClickBtnAdd);
+    // console.log("isClickAdditionalTimerBtn", isClickAdditionalTimerBtn);
+    // console.log("isFormVisible", isFormVisible);
+    // console.log("isListVisible", isListVisible);
+    // console.log("isAdditionListVisible", isAdditionListVisible);
+    // console.log("initialTimer", initialTimer);
+    // console.log("previousCurrentTimer", previousCurrentTimer);
+    console.log("currentTimer", currentTimer.remainingTime);
+    console.log(
+      "hasRunAllAdditionTimersRef",
+      hasRunAllAdditionTimersRef.current
+    );
   });
 
   useEffect(() => {
@@ -112,7 +119,7 @@ export default function App() {
     getSoundEnabled().then((isEnabled) => {
       setIsSoundEnabled(isEnabled);
     });
-  }, []);
+  }, [setIsSoundEnabled]);
 
   const toggleSound = () => {
     const newValue = !isSoundEnabled;
@@ -215,6 +222,7 @@ export default function App() {
     switch (actionType) {
       case "additionalTimer":
         setIsClickAdditionalTimerBtn(true);
+        console.log("Set to true", isClickAdditionalTimerBtn);
         setPreviousCurrentTimer(currentTimer);
 
         let mainTimer = timers.find((timer) => timer.id === currentTimer.id);
