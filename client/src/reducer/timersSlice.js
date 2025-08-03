@@ -11,15 +11,27 @@ export const timersSlice = createSlice({
 
   reducers: {
     addTimer: (state, action) => {
+      const { id, isMain, mainTimerId } = action.payload;
+
       const newTimers = state.map((timer) => ({
         ...timer,
         isSelected: false,
       }));
 
-      const updatedTimers = [
-        ...newTimers,
-        { ...action.payload, isSelected: true },
-      ];
+      let updatedTimers;
+
+      if (!mainTimerId) {
+        updatedTimers = [...newTimers, { ...action.payload, isSelected: true }];
+      } else {
+        updatedTimers = [
+          ...newTimers,
+          { ...action.payload, isSelected: isMain },
+        ];
+      }
+
+      updatedTimers = updatedTimers.map((timer) =>
+        timer.id === mainTimerId ? { ...timer, isSelected: true } : timer
+      );
 
       console.log(`addTimer:`, updatedTimers);
 
@@ -28,13 +40,20 @@ export const timersSlice = createSlice({
     },
 
     updateTimer: (state, action) => {
-      const updatedState = state.map((timer) =>
-        timer.id === action.payload.id
-          ? { ...timer, ...action.payload, isSelected: true }
-          : { ...timer, isSelected: false }
-      );
+      const updatedTimers = Array.isArray(action.payload)
+        ? action.payload
+        : [action.payload];
 
-      console.log(`updateTimer:`, updatedState);
+      const updatedState = state.map((timer) =>
+        updatedTimers.find((updatedTimer) => updatedTimer.id === timer.id)
+          ? {
+              ...timer,
+              ...updatedTimers.find(
+                (updatedTimer) => updatedTimer.id === timer.id
+              ),
+            }
+          : timer
+      );
 
       saveTimers(JSON.parse(JSON.stringify(updatedState)));
       return updatedState;
@@ -45,7 +64,6 @@ export const timersSlice = createSlice({
         (timer) => timer.id !== action.payload
       );
       saveTimers(JSON.parse(JSON.stringify(updatedTimers)));
-      console.log(updatedTimers);
       return updatedTimers;
     },
 
@@ -67,5 +85,4 @@ export const timersSlice = createSlice({
 
 export const { addTimer, updateTimer, deleteTimer, clearTimers } =
   timersSlice.actions;
-
 export default timersSlice.reducer;

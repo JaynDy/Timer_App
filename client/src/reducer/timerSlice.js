@@ -17,9 +17,8 @@ export const timerSlice = createSlice({
 
   reducers: {
     setCurrentTimer: (state, action) => {
-      //   console.log("Обновление", state.currentTimer, "на", action.payload);
       state.currentTimer = { ...state.currentTimer, ...action.payload };
-      console.log("Updated currentTimer state:", state.currentTimer);
+      // console.log("Updated currentTimer state:", state.currentTimer);
     },
 
     clearCurrentTimer: (state) => {

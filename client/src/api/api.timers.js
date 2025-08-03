@@ -14,3 +14,19 @@ export const saveTimers = async (timers) => {
     body: JSON.stringify(timers),
   });
 };
+
+export const getSoundEnabled = async () => {
+  const response = await fetch(`${SERVER_URL}/sound`);
+  const data = await response.json();
+  return data.isSoundEnabled;
+};
+
+export const saveSoundEnabled = async (isEnabled) => {
+  await fetch(`${SERVER_URL}/sound`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ isSoundEnabled: isEnabled }),
+  });
+};

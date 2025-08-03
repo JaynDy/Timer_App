@@ -1,12 +1,4 @@
 {
-  "timer": [
-    {
-      "id": "f8713b8d-d6ad-4dcb-b084-751aebd24088",
-      "remainingTime": "00 : 00 : 05",
-      "initialTime": "00 : 00 : 05",
-      "isSelected": true,
-      "isMain": true,
-      "mainTimerId": null
-    }
-  ]
+  "timer": [],
+  "isSoundEnabled": false
 }

@@ -4,12 +4,17 @@
   gap: 5px;
   flex-direction: row;
   top: 70%;
-  left: 21%;
+  left: 23%;
   width: 12%;
 }
 .btn {
   -webkit-app-region: no-drag;
   cursor: pointer;
+}
+.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
 }
 .trashBtn {
   width: 23px !important;

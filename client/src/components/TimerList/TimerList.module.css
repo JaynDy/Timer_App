@@ -5,7 +5,7 @@
   margin: 0;
   background-color: var(--screen-color);
   border-radius: 33px;
-  width: 85%;
+  width: 86%;
   height: 45%;
   perspective: 1500px;
   border: 2px solid green;
@@ -32,7 +32,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-app-region: no-drag;
-  margin: 0;
+  margin: 0 0 2px;
+  font-size: 17px;
 }
 .emptyContainer {
   width: 13px;
@@ -89,6 +90,7 @@ li:last-child {
   justify-content: space-between;
   width: 85%;
   -webkit-app-region: no-drag;
+  overflow: visible;
 }
 
 .btnContainer {

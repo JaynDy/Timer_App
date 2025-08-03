@@ -10,9 +10,41 @@
   margin-top: 10%;
   max-width: 90%;
 }
+.restartImg {
+  position: absolute;
+  top: 31%;
+  left: 42%;
+  width: 30px !important;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+
+.volumeContainer {
+  position: absolute;
+  top: 31%;
+  left: 77%;
+}
+.volumeImg {
+  max-width: 45%;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+.mutedLine::after {
+  content: "";
+  position: absolute;
+  top: 37%;
+  left: -10%;
+  width: 60%;
+  height: 2px;
+  border-radius: 8px;
+  background-color: rgb(91, 9, 168);
+  transform: rotate(45deg);
+  transform-origin: center;
+  pointer-events: none;
+}
 .labelTime {
   position: absolute;
-  top: 47%;
+  top: 49%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: Georgia, "Times New Roman", Times, serif;

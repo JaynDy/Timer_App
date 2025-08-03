@@ -13,7 +13,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 15px;
 }
 label {
   font-family: Georgia, "Times New Roman", Times, serif;
@@ -44,7 +44,7 @@ img.crossImg {
   height: 20px;
 }
 .timerInput {
-  margin-top: 8.5%;
+  margin-top: 12.5%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,17 +91,21 @@ input {
   border: none;
   border-radius: 8px;
   padding: 4px 8px;
-  background-color: green;
+  background-color: rgb(91, 123, 91);
   color: rgb(234, 225, 225);
   z-index: 10;
   -webkit-app-region: no-drag;
-  cursor: pointer;
+  cursor: no-drop;
+}
+.addTimerBtn {
+  background-color: rgb(112, 66, 112);
 }
 .addTimerBtn.available {
   color: cyan;
   background-color: rgb(118, 3, 118);
+  cursor: pointer;
 }
-.addTimerBtn {
-  color: rgb(234, 225, 225);
-  background-color: gray;
+.saveBtn.available {
+  background-color: green;
+  cursor: pointer;
 }
