@@ -1,4 +1,4 @@
-const SERVER_URL = "";
+const SERVER_URL = "https://timer-app-server.onrender.com";
 console.log("SERVER_URL:", SERVER_URL);
 
 export const getTimers = async () => {
