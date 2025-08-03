@@ -1,10 +1,16 @@
 import { defineConfig } from "vite";
+import htmlConfig from "vite-plugin-html-config";
 
 export default defineConfig({
-  // server: {
-  //   proxy: {
-  //     "/timers": "https://timer-app-server.onrender.com",
-  //     "/sound": "https://timer-app-server.onrender.com",
-  //   },
-  // },
+  plugins: [
+    htmlConfig({
+      meta: [
+        {
+          name: "Content-Security-Policy",
+          content:
+            "default-src 'self'; connect-src 'self' https://timer-app-server.onrender.com; script-src 'self'; style-src 'self' 'unsafe-inline';",
+        },
+      ],
+    }),
+  ],
 });
