@@ -11,7 +11,7 @@ import orangeBtn from "../../img/orangeBtn.png?react";
 import yellowBtn from "../../img/yellowBtn.png?react";
 import cross from "../../img/cross.svg?react";
 import bee from "../../img/bee.png?react";
-import trayBee from "../../img/traybee.png?react";
+// import trayBee from "../../img/traybee.png?react";
 import trash from "../../img/paper-bin.png?react";
 import clip from "../../img/paper-clip.png?react";
 import editPencil from "../../img/edit-pencil.png?react";
@@ -33,7 +33,7 @@ export const iconsMap = {
   yellowBtn,
   cross,
   bee,
-  trayBee,
+  // trayBee,
   trash,
   clip,
   editPencil,
