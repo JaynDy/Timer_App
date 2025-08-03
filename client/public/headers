@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: default-src 'self'; connect-src 'self' https://timer-app-server.onrender.com; script-src 'self'; style-src 'self' 'unsafe-inline';
