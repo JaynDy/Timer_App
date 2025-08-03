@@ -1,4 +1,5 @@
 const SERVER_URL = "";
+console.log("SERVER_URL:", SERVER_URL);
 
 export const getTimers = async () => {
   const response = await fetch(`${SERVER_URL}/timers`);
