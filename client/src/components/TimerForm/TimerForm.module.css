@@ -14,6 +14,9 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 15px;
+  @media screen {
+    gap: 3px;
+  }
 }
 label {
   font-family: Georgia, "Times New Roman", Times, serif;
@@ -52,6 +55,9 @@ img.crossImg {
   color: green;
   font-size: 14px;
   font-weight: bolder;
+  @media screen and (max-width: 300px) {
+    margin-top: 8.5%;
+  }
 }
 input {
   border: none;

@@ -3,6 +3,9 @@
   top: -20%;
   left: 60%;
   margin-right: 15px;
+  @media screen and (max-width: 300px) {
+    top: 0%;
+  }
 }
 .alarmAnimation {
   animation: shake 0.5s ease-in-out infinite;

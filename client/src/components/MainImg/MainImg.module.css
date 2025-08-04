@@ -17,6 +17,9 @@
   width: 30px !important;
   -webkit-app-region: no-drag;
   cursor: pointer;
+  @media screen and (max-width: 300px) {
+    top: 28%;
+  }
 }
 
 .volumeContainer {
@@ -50,4 +53,7 @@
   font-family: Georgia, "Times New Roman", Times, serif;
   color: green;
   font-size: medium;
+  @media screen and (max-width: 300px) {
+    top: 47%;
+  }
 }
